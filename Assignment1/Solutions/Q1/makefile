@@ -1,31 +1,25 @@
-#makefile begins
-
 JFLAGS = -g
 JC = javac
-JVM= java 
-FILE=
 .SUFFIXES: .java .class
 .java.class:
-        $(JC) $(JFLAGS) $*.java
+	$(JC) $(JFLAGS) $*.java
+
+# This uses the line continuation character (\) for readability
+# You can list these all on a single line, separated by a space instead.
+# If your version of make can't handle the leading tabs on each
+# line, just remove them (these are also just added for readability).
+# CLASSES = \
+#         Foo.java \
+#         Blah.java \
+#         Library.java \
+#         Main.java 
 
 CLASSES = \
-        Test.java
-
-# CLASSES = \
-#         Experiment.java \
-#         Block.java \
-#         Spring.java \
-#         PhysicsElement.java \
-#         Simulator.java
-
-MAIN = Test
+		Test.java
 
 default: classes
 
 classes: $(CLASSES:.java=.class)
 
-run: $(MAIN).class
-	$(JVM) $(MAIN) $(FILE)
-
 clean:
-        $(RM) *.class
+	$(RM) *.class
