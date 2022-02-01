@@ -21,8 +21,7 @@ class Party extends Thread
 	int[] currentAllocation;
 	int[] remainingNeed;
 	Semaphore mutex,mutex2;
-	BufferedWriter writer;
-	Party(int id, int[] m, int[] c, int[] r, Semaphore mutex,Semaphore mutex2, BufferedWriter writer)
+	Party(int id, int[] m, int[] c, int[] r, Semaphore mutex,Semaphore mutex2)
 	{
 		this.id = id;
 		this.maximumNeed = m;
@@ -30,7 +29,6 @@ class Party extends Thread
 		this.remainingNeed = r;
 		this.mutex = mutex;
 		this.mutex2 = mutex2;
-		this.writer = writer;
 		//print();
 	}
 	public void run()
@@ -124,51 +122,15 @@ class Party extends Thread
 class Resource
 {
 	static int[] available;
-	//static StringBuffer[] printString;
 	Resource(int[] a, int n)
 	{
 		available = a;
-		/*printString = new StringBuffer[n];
-		for (int i = 0; i < n; ++i)
-			printString[i] = new StringBuffer(" ");*/
 	}
 	public static void updateAvailableResources(int[] currentAllocation)
 	{
 		for (int r = 0; r < available.length; ++r)
 			available[r] += currentAllocation[r];
 	}
-	/*public static void printToString(int id, int[] currentAllocation, int[] remainingNeed)
-	{
-			printString.append("--> Process "+id+"\n");
-			printString.append("\tAllocated: ");
-			for (int r = 0; r < currentAllocation.length; ++r)
-				printString.append(currentAllocation[r]+" ");
-			printString.append("\n");
-			printString.append("\tNeeded: ");
-			for (int r = 0; r < remainingNeed.length; ++r)
-				printString.append(remainingNeed[r]+" ");
-			printString.append("\n");
-			printString.append("\tAvailable: ");
-			for (int r = 0; r < Resource.available.length; ++r)
-				printString.append(Resource.available[r]+" ");
-			printString.append("\n");
-			printString.append("\tResource Allocated\n");
-			printString.append("\tProcess executing...\n");
-			printString.append("\tExecution completed\n");
-			printString.append("\tResource released\n");
-			Resource.updateAvailableResources(currentAllocation);
-			printString.append("\tNow Available: ");
-			for (int r = 0; r < Resource.available.length; ++r)
-				printString.append(Resource.available[r]+" ");
-			printString.append("\n");
-			printString.append("\n");
-			printString.append("\n");
-	}
-	public static void printToFile(BufferedWriter writer)throws IOException
-	{
-		writer.write(printString.toString());
-		writer.newLine();
-	}*/
 }
 
 class Restaurant
@@ -205,12 +167,13 @@ class Restaurant
 		processes = new Party[n];
 		
 		read(reader,tokens); //read from input file
-		print(writer);
 
 		//calculate remaining need
 		for (p = 0; p < n; ++p)
 			for (r = 0; r < m; ++r)
 				remainingNeed[p][r] = maximumNeed[p][r] - currentAllocation[p][r];
+
+		print(writer);
 
 		//finding out safe sequence
 		for (s = 0; s < n; ++s) //for sequence index
@@ -261,7 +224,7 @@ class Restaurant
 		Semaphore mutex2 = new Semaphore(1);
 		Resource resource = new Resource(available,n);
 		for (p = 0; p < n; ++p)
-			processes[p] = new Party(p,maximumNeed[p],currentAllocation[p],remainingNeed[p],mutex,mutex2,writer);
+			processes[p] = new Party(p,maximumNeed[p],currentAllocation[p],remainingNeed[p],mutex,mutex2);
 
 		for (p = 0; p < n; ++p)
 			processes[p].start();
@@ -312,7 +275,7 @@ class Restaurant
 		System.out.println(); writer.newLine();
 
 		System.out.println("\tMaximum Need\t\t|Allocation\t\t|Remaining Need");
-		writer.write("\tMaximum Need\t\t|Allocation\t\t|Remaining Need"); writer.newLine();
+		writer.write("\tMaximum Need\t|Allocation\t\t|Remaining Need"); writer.newLine();
 		//printing current allocation
 		for (i = 0; i < n; ++i)
 		{
