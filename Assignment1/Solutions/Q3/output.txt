@@ -22,32 +22,32 @@ P3 P1 P2 P0 P4 P5 P6
 	Now Available: 1 11 5 2 
 
 
---> Process 1
-	Allocated: 1 0 0 0 
-	Needed: 0 7 5 0 
+--> Process 2
+	Allocated: 1 3 5 4 
+	Needed: 1 0 0 2 
 	Available: 1 11 5 2 
 	Resource Allocated
 	Process executing...
 	Execution completed
 	Resource released
-	Now Available: 2 11 5 2 
-
-
---> Process 2
-	Allocated: 1 3 5 4 
-	Needed: 1 0 0 2 
-	Available: 2 11 5 2 
-	Resource Allocated
-	Process executing...
-	Execution completed
-	Resource released
-	Now Available: 3 14 10 6 
+	Now Available: 2 14 10 6 
 
 
 --> Process 4
 	Allocated: 0 0 1 4 
 	Needed: 0 6 4 2 
-	Available: 3 14 10 6 
+	Available: 2 14 10 6 
+	Resource Allocated
+	Process executing...
+	Execution completed
+	Resource released
+	Now Available: 2 14 11 10 
+
+
+--> Process 1
+	Allocated: 1 0 0 0 
+	Needed: 0 7 5 0 
+	Available: 2 14 11 10 
 	Resource Allocated
 	Process executing...
 	Execution completed
@@ -66,21 +66,21 @@ P3 P1 P2 P0 P4 P5 P6
 	Now Available: 4 14 16 12 
 
 
---> Process 6
-	Allocated: 0 0 1 2 
-	Needed: 3 1 0 0 
+--> Process 0
+	Allocated: 2 2 2 2 
+	Needed: 2 3 4 5 
 	Available: 4 14 16 12 
 	Resource Allocated
 	Process executing...
 	Execution completed
 	Resource released
-	Now Available: 4 14 17 14 
+	Now Available: 6 16 18 14 
 
 
---> Process 0
-	Allocated: 2 2 2 2 
-	Needed: 2 3 4 5 
-	Available: 4 14 17 14 
+--> Process 6
+	Allocated: 0 0 1 2 
+	Needed: 3 1 0 0 
+	Available: 6 16 18 14 
 	Resource Allocated
 	Process executing...
 	Execution completed

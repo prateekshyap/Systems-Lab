@@ -15,7 +15,7 @@ JC = javac
 #         Main.java 
 
 CLASSES = \
-		Restaurant.java
+		Wedding.java
 
 default: classes
 
