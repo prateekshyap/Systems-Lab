@@ -62,7 +62,7 @@ class Party extends Thread
 			System.out.print(currentAllocation[r]+" ");
 			printString.append(currentAllocation[r]+" ");
 		}
-		System.out.println(); //writer.newLine();
+		System.out.println();
 		System.out.print("\tNeeded: ");
 		printString.append("\n");
 		printString.append("\tNeeded: ");
@@ -71,7 +71,7 @@ class Party extends Thread
 			System.out.print(remainingNeed[r]+" ");
 			printString.append(remainingNeed[r]+" ");
 		}
-		System.out.println(); //writer.newLine();
+		System.out.println();
 		System.out.print("\tAvailable: ");
 		printString.append("\n");
 		printString.append("\tAvailable: ");
@@ -80,7 +80,7 @@ class Party extends Thread
 			System.out.print(Resource.available[r]+" ");
 			printString.append(Resource.available[r]+" ");
 		}
-		System.out.println(); //writer.newLine();
+		System.out.println();
 		System.out.println("\tResource Allocated");
 		System.out.println("\tProcess executing...");
 		System.out.println("\tExecution completed");

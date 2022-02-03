@@ -3,24 +3,29 @@ import java.io.InputStreamReader;
 import java.io.IOException;
 
 import java.util.concurrent.Semaphore;
+import java.util.HashSet;
 
 import EDU.oswego.cs.dl.util.concurrent.PrioritySemaphore;
 
 class Friend extends Thread
 {
-	private int id;
-	private int couponNo;
-	private int[] requests;
-	private Semaphore mutex;
+	private int id; //unique
+	private int couponNo; //unique
+	private int[] requests; //sequence of requests
+	private Semaphore mutex; //semaphore for blocking
 	private int index = 0;
-	private Heap heap;
+	private Heap heap; //heap instance
 	Friend(int id, Semaphore mutex)
 	{
 		this.id = id;
+		//generate unique coupon no
 		this.couponNo = (int)(Math.random()*(999-100+1)+100);
-		this.requests = new int[(int)(Math.random()*(5-1+1)+1)];
+		while (Wedding.couponNos.contains(this.couponNo))
+			++this.couponNo;
+		Wedding.couponNos.add(this.couponNo);
+		this.requests = new int[(int)(Math.random()*(5-1+1)+1)]; //at most 5 requests
 		for (int i = 0; i < this.requests.length; ++i)
-			this.requests[i] = (int)(Math.random()*(10-1+1)+1);
+			this.requests[i] = (int)(Math.random()*(10-1+1)+1); //random number between 1 to 10
 		this.mutex = mutex;
 	}
 	public void setHeap(Heap heap) { this.heap = heap; }
@@ -32,17 +37,16 @@ class Friend extends Thread
 	{
 		try
 		{
-			while (this.index < this.requests.length)
+			while (this.index < this.requests.length) //for each request
 			{
-				this.mutex.acquire();
-				//this.setPriority(couponNo/100);
-				if (this.requests[this.index] > Wedding.readProb)
+				this.mutex.acquire(); //block the thread (it will be released after heap extraction)
+				if (this.requests[this.index] > Wedding.readProb) //0.7 probability for reading
 					Wedding.readFromCard(this.id,this.couponNo);
-				else
+				else //0.3 for writing
 					Wedding.writeToCard(this.id,this.couponNo);
-				Wedding.states[id] = false;
-				++this.index;
-				if (this.index < this.requests.length) heap.putBack(this);
+				Wedding.states[id] = false; //indicate completion of one request
+				++this.index; //increase the loop variable
+				if (this.index < this.requests.length) heap.putBack(this); //if more requests present, put it back to heap
 			}
 		}
 		catch(InterruptedException e){}
@@ -81,14 +85,14 @@ class Heap
 			heapify(min);
 		}
 	}
-	public Friend extractRoot()
+	public Friend extractRoot() //standard extract root method
 	{
 		Friend result = friends[0];
 		friends[0] = friends[--heapSize];
 		heapify(0);
 		return result;
 	}
-	public void putBack(Friend friend)
+	public void putBack(Friend friend) //standard insertion
 	{
 		friends[heapSize] = friend;
 		int i = heapSize++;
@@ -101,15 +105,19 @@ class Heap
 			i = parent(i);
 		}
 	}
-	public void startProcesses()
+	public void startProcesses() //start all the threads
 	{
 		for (int i = 0; i < heapSize; ++i)
 			friends[i].start();
 	}
-	public void setPriority(int id, int couponNo)
+	public boolean isEmpty()
+	{
+		return this.heapSize == 0;
+	}
+	/*public void setPriority(int id, int couponNo)
 	{
 		friends[id].setPriority(couponNo/100);
-	}
+	}*/
 }
 
 class Wedding
@@ -122,21 +130,22 @@ class Wedding
 	static Friend[] friends;
 	static int readProb;
 	static Heap heap = null;
+	static HashSet<Integer> couponNos;
 
 	public static void readFromCard(int id, int couponNo)
 	{
 		try{
 			System.out.println("***>Coupon No: "+couponNo+" ***>TRYING to READ<***");
 
-			setPriority(id,couponNo);
+			setPriority(id,couponNo); // set thread priority
 			
-			serviceQueue.acquire();
+			serviceQueue.acquire(); //acquire semaphore for priority
 
-			rMutex.acquire();
+			rMutex.acquire(); //semaphore for reading
 			
 			++readCount;
 			if (readCount == 1)
-				semCard.acquire();
+				semCard.acquire(); //semaphore for database
 			
 			serviceQueue.release();
 			rMutex.release();
@@ -160,11 +169,11 @@ class Wedding
 		try{
 			System.out.println("--->Coupon No: "+couponNo+" --->TRYING to WRITE<---");
 
-			setPriority(id,couponNo);
+			setPriority(id,couponNo); //set thread priority
 			
-			serviceQueue.acquire();
+			serviceQueue.acquire(); //acquire semaphore for priority
 
-			semCard.acquire();
+			semCard.acquire(); //semaphore for database
 			serviceQueue.release();
 
 			System.out.println("- Coupon No: "+couponNo+" is WRITING...");
@@ -183,17 +192,18 @@ class Wedding
 	public static void main(String[] args) throws IOException
 	{
 		int n = 0;
-		readProb = 3;
+		readProb = 3; //change this number to modify reading and writing probability
 		readCount = 0;
 		serviceQueue = new PrioritySemaphore(1);
 		semCard = new Semaphore(1);
 		rMutex = new Semaphore(1);
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		couponNos = new HashSet<Integer>();
 		
 		System.out.println("Enter the value of n-");
 		n = Integer.parseInt(reader.readLine());
-		blocks = new Semaphore[n];
+		blocks = new Semaphore[n]; //individual semaphores for blocking threads
 		states = new boolean[n];
 		for (int i = 0; i < n; ++i)
 			blocks[i] = new Semaphore(0);
@@ -201,22 +211,22 @@ class Wedding
 		friends = new Friend[n];
 		for (int i = 0; i < n; ++i)
 		{
-			friends[i] = new Friend(i,blocks[i]);
+			friends[i] = new Friend(i,blocks[i]); //create threads
 			//friends[i].setPriority(friends[i].getCouponNo()/100);
 		}
-		heap = new Heap(friends);
+		heap = new Heap(friends); //create heap
 		for (int i = 0; i < n; ++i)
 		{
-			friends[i].setHeap(heap);
+			friends[i].setHeap(heap); //set heap instance in threads
 		}
 		try{
-			heap.startProcesses();
-			for (int i = 0; i < n; ++i)
+			heap.startProcesses(); //start all processes
+			while (!heap.isEmpty()) //till we have more processes
 			{
-				Friend temp = heap.extractRoot();
-				states[temp.getThreadId()] = true;
-				blocks[temp.getThreadId()].release();
-				Thread.sleep(3000);
+				Friend temp = heap.extractRoot(); //extract the process with minimum coupon number
+				states[temp.getThreadId()] = true; //set for execution
+				blocks[temp.getThreadId()].release(); //release the lock
+				Thread.sleep(3000); //wait for 3 seconds
 			}
 		}catch(InterruptedException e){}
 	}

@@ -139,8 +139,7 @@ class Heap
 	{
 		if (heapSize < 1) return null; //return null if heap is empty
 		Dish result = dishes[0]; //hold the root
-		dishes[0] = dishes[heapSize-1]; //replace root with the last element
-		--heapSize; //reduce the heap size
+		dishes[0] = dishes[--heapSize]; //replace root with the last element
 		heapify(0); //heapify root
 		return result; //return held value
 	}
@@ -156,8 +155,7 @@ class Heap
 	public void putBack(Dish dish) //put back the dish with remaining time into heap
 	{
 		dishes[heapSize] = dish; //store at the last index
-		int i = heapSize; //store the index in i
-		++heapSize; //increase heap size
+		int i = heapSize++; //store the index in i
 		Dish temp = null;
 		while (parent(i) >= 0 && ((dishes[parent(i)].getRemainingTime() > dishes[i].getRemainingTime()) || (dishes[parent(i)].getRemainingTime() == dishes[i].getRemainingTime() && dishes[parent(i)].getArrivalTime() > dishes[i].getArrivalTime()) || (dishes[parent(i)].getRemainingTime() == dishes[i].getRemainingTime() && dishes[parent(i)].getArrivalTime() == dishes[i].getArrivalTime() && dishes[parent(i)].getId() > dishes[i].getId()))) //till parent is larger than the child
 		{
