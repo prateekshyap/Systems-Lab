@@ -3,6 +3,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.InputStreamReader;
 import java.io.IOException;
 
 import java.nio.ByteBuffer;
@@ -14,9 +15,10 @@ import java.nio.file.StandardOpenOption;
 
 import java.util.concurrent.Semaphore;
 
+//a class to store the details of the party
 class Party extends Thread
 {
-	int id;
+	int id; //unique
 	int[] maximumNeed;
 	int[] currentAllocation;
 	int[] remainingNeed;
@@ -36,18 +38,19 @@ class Party extends Thread
 		try{
 		for (int r = 0; r < remainingNeed.length; ++r)
 		{
-			if (remainingNeed[r] > Resource.available[r])
+			if (remainingNeed[r] > Resource.available[r]) //if request cannot be satisfied
 			{
-				mutex.acquire();
-				r = -1;
-				mutex.release();
-				continue;
+				mutex.acquire(); //acquire block mutex
+				r = -1; //reset loop variable
+				mutex.release(); //release block mutex
+				continue; //continue
 			}
 		}
 
-		mutex.release();
-		mutex2.acquire();
+		mutex.release(); //release block mutex
+		mutex2.acquire(); //acquire semaphore
 
+		//print everything
 		StringBuffer printString = new StringBuffer("");
 
 		System.out.println("--> Process "+id);
@@ -111,7 +114,7 @@ class Party extends Thread
 		fileChannel.write(buffer);
 		fileChannel.close();
 
-		mutex2.release();
+		mutex2.release(); //release semaphore
 		}catch(InterruptedException ie)
 		{}
 		catch(IOException ie)
@@ -119,6 +122,7 @@ class Party extends Thread
 	}
 }
 
+//class to store shared resources
 class Resource
 {
 	static int[] available;
@@ -148,8 +152,11 @@ class Restaurant
 		boolean[] satisfied = null;
 		Party[] processes = null;
 		
-		File inputFile = new File("input.txt");
-		File outputFile = new File("output.txt");
+		BufferedReader cmdReader = new BufferedReader(new InputStreamReader(System.in));
+		System.out.println("Enter the input file name-");
+		File inputFile = new File(cmdReader.readLine());
+		System.out.println("Enter the output file name-");
+		File outputFile = new File(cmdReader.readLine());
 		BufferedReader reader = new BufferedReader(new FileReader(inputFile));
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
 
@@ -220,8 +227,8 @@ class Restaurant
 		System.out.println(); writer.newLine();
 		System.out.println(); writer.newLine();
 
-		Semaphore mutex = new Semaphore(0);
-		Semaphore mutex2 = new Semaphore(1);
+		Semaphore mutex = new Semaphore(0); //block mutex for blocking the threads
+		Semaphore mutex2 = new Semaphore(1); //semaphore for mutual exclusion
 		Resource resource = new Resource(available,n);
 		for (p = 0; p < n; ++p)
 			processes[p] = new Party(p,maximumNeed[p],currentAllocation[p],remainingNeed[p],mutex,mutex2);
@@ -230,6 +237,7 @@ class Restaurant
 			processes[p].start();
 
 		reader.close();
+		cmdReader.close();
 		writer.close();
 	}
 
@@ -274,8 +282,23 @@ class Restaurant
 		}
 		System.out.println(); writer.newLine();
 
-		System.out.println("\tMaximum Need\t\t|Allocation\t\t|Remaining Need");
-		writer.write("\tMaximum Need\t|Allocation\t\t|Remaining Need"); writer.newLine();
+		System.out.print("\tMaximum Need");
+		writer.write("\tMaximum Need");
+		for (i = 0; i < m-1; ++i)
+		{
+			System.out.print("\t");
+			if (i < m-2)
+				writer.write("\t");
+		}
+		System.out.print("|Allocation");
+		writer.write("|Allocation");
+		for (i = 0; i < m-1; ++i)
+		{
+			System.out.print("\t");
+			writer.write("\t");
+		}
+		System.out.println("|Remaining Need");
+		writer.write("|Remaining Need"); writer.newLine();
 		//printing current allocation
 		for (i = 0; i < n; ++i)
 		{
