@@ -233,6 +233,8 @@ class Restaurant
 		for (p = 0; p < n; ++p)
 			processes[p] = new Party(p,maximumNeed[p],currentAllocation[p],remainingNeed[p],mutex,mutex2);
 
+		System.out.println("Safe Execution Sequence obtained using Multithreading-");
+
 		for (p = 0; p < n; ++p)
 			processes[p].start();
 

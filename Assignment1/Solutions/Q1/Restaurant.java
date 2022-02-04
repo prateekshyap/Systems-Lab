@@ -350,6 +350,7 @@ class Restaurant
 			System.out.println();
 			System.out.println();
 			System.out.println("Average Waiting Time-");
+			avgWaitingTime = 0;
 			for (i = 0; i < n; ++i)
 				avgWaitingTime += (double)waitingTimestamps[i];
 			avgWaitingTime /= n;

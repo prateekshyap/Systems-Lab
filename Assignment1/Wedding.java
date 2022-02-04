@@ -233,9 +233,14 @@ class Wedding
 				blocks[temp.getThreadId()].release(); //release the lock
 				Thread.sleep(2000); //wait for 3 seconds
 			}
-			Thread.sleep(10000);
-			for (int i = 0; i < n ; ++i)
-				blocks[i].release();
+			Thread.sleep(5000);
+			while (!heap.isEmpty())
+			{
+				Friend temp = heap.extractRoot(); //extract the process with minimum coupon number
+				states[temp.getThreadId()] = true; //set for execution
+				blocks[temp.getThreadId()].release(); //release the lock
+				Thread.sleep(2000); //wait for 3 seconds
+			}
 		}catch(InterruptedException e){}
 	}
 }
