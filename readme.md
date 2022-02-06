@@ -1,6 +1,6 @@
 > Computer Systems Lab CS558, IITG
 >
-> Roll Num - 214101037 (Prateekshya Priyadarshini), 214101058 (Vijay Purohit)
+> Roll Num - 214101037 [Prateekshya Priyadarshini](https://github.com/prateekshyap), 214101058 [Vijay Purohit](https://github.com/vijaypurohit)
 
 
 It contains solutions to assignments done during Winter Semester 2022.
