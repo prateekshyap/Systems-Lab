@@ -23,7 +23,8 @@ class Party extends Thread
 	int[] currentAllocation;
 	int[] remainingNeed;
 	Semaphore mutex,mutex2;
-	Party(int id, int[] m, int[] c, int[] r, Semaphore mutex,Semaphore mutex2)
+	String outputFileName;
+	Party(int id, int[] m, int[] c, int[] r, Semaphore mutex,Semaphore mutex2, String outputFileName)
 	{
 		this.id = id;
 		this.maximumNeed = m;
@@ -31,6 +32,7 @@ class Party extends Thread
 		this.remainingNeed = r;
 		this.mutex = mutex;
 		this.mutex2 = mutex2;
+		this.outputFileName = outputFileName;
 		//print();
 	}
 	public void run()
@@ -107,7 +109,7 @@ class Party extends Thread
 		
 		//writing to file
 		ByteBuffer buffer = ByteBuffer.wrap(printString.toString().getBytes());
-		Path path = Paths.get("output.txt");
+		Path path = Paths.get(outputFileName);
 		FileChannel fileChannel = FileChannel.open(path,StandardOpenOption.WRITE,StandardOpenOption.APPEND);
 		fileChannel.position(fileChannel.size()-1);
 		FileLock fileLock = fileChannel.lock();
@@ -146,7 +148,7 @@ class Restaurant
 	public static void main(String[] args)throws IOException
 	{
 		int r = 0, s = 0, p = 0, safeProcessCount = 0;
-		String line = "";
+		String line = "",outputFileName = "";
 		String[] tokens = null;
 		boolean set = false;
 		boolean[] satisfied = null;
@@ -156,7 +158,8 @@ class Restaurant
 		System.out.println("Enter the input file name-");
 		File inputFile = new File(cmdReader.readLine());
 		System.out.println("Enter the output file name-");
-		File outputFile = new File(cmdReader.readLine());
+		outputFileName = cmdReader.readLine();
+		File outputFile = new File(outputFileName);
 		BufferedReader reader = new BufferedReader(new FileReader(inputFile));
 		BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile));
 
@@ -231,7 +234,7 @@ class Restaurant
 		Semaphore mutex2 = new Semaphore(1); //semaphore for mutual exclusion
 		Resource resource = new Resource(available,n);
 		for (p = 0; p < n; ++p)
-			processes[p] = new Party(p,maximumNeed[p],currentAllocation[p],remainingNeed[p],mutex,mutex2);
+			processes[p] = new Party(p,maximumNeed[p],currentAllocation[p],remainingNeed[p],mutex,mutex2,outputFileName);
 
 		System.out.println("Safe Execution Sequence obtained using Multithreading-");
 
