@@ -1,10 +1,11 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.FileReader;
+import java.io.File;
 
 import java.util.concurrent.Semaphore;
 import java.util.HashSet;
-
 
 class Friend extends Thread
 {
@@ -21,6 +22,15 @@ class Friend extends Thread
 		while (Wedding.couponNos.contains(this.couponNo))
 			++this.couponNo;
 		Wedding.couponNos.add(this.couponNo);
+		this.requests = new int[(int)(Math.random()*(2-1+1)+1)]; //at most 3 requests
+		for (int i = 0; i < this.requests.length; ++i)
+			this.requests[i] = (int)(Math.random()*(10-1+1)+1); //random number between 1 to 10
+		this.mutex = mutex;
+	}
+	Friend(int id, Semaphore mutex, int couponNo)
+	{
+		this.id = id;
+		this.couponNo = couponNo;
 		this.requests = new int[(int)(Math.random()*(2-1+1)+1)]; //at most 3 requests
 		for (int i = 0; i < this.requests.length; ++i)
 			this.requests[i] = (int)(Math.random()*(10-1+1)+1); //random number between 1 to 10
@@ -195,7 +205,8 @@ class Wedding
 
 	public static void main(String[] args) throws IOException
 	{
-		int n = 0;
+		int n = 0, choice = 0;
+		String inputFileName = "", nextLine = "";
 		readProb = 3; //change this number to modify reading and writing probability
 		readCount = 0;
 		serviceQueue = new Semaphore(1);
@@ -203,21 +214,46 @@ class Wedding
 		rMutex = new Semaphore(1);
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		BufferedReader fileReader = null;
 		couponNos = new HashSet<Integer>();
 		
-		System.out.println("Enter the value of n-");
-		n = Integer.parseInt(reader.readLine());
-		blocks = new Semaphore[n]; //individual semaphores for blocking threads
-		states = new boolean[n];
-		for (int i = 0; i < n; ++i)
-			blocks[i] = new Semaphore(0);
-
-		friends = new Friend[n];
-		for (int i = 0; i < n; ++i)
+		System.out.println("Enter 0 for random coupon numbers/ 1 for input file-");
+		choice = Integer.parseInt(reader.readLine());
+		if (choice == 0)
 		{
-			friends[i] = new Friend(i,blocks[i]); //create threads
-			//friends[i].setPriority(friends[i].getCouponNo()/100);
+			System.out.println("Enter the value of n-");
+			n = Integer.parseInt(reader.readLine());
+			blocks = new Semaphore[n]; //individual semaphores for blocking threads
+			states = new boolean[n];
+			for (int i = 0; i < n; ++i)
+				blocks[i] = new Semaphore(0);
+
+			friends = new Friend[n];
+			for (int i = 0; i < n; ++i)
+				friends[i] = new Friend(i,blocks[i]); //create threads
+
+			reader.close();
 		}
+		else if (choice == 1)
+		{
+			System.out.println("Write the input file name-");
+			inputFileName = reader.readLine();
+			fileReader = new BufferedReader(new FileReader(new File(inputFileName)));
+			n = Integer.parseInt(fileReader.readLine());
+			blocks = new Semaphore[n]; //individual semaphores for blocking threads
+			states = new boolean[n];
+			for (int i = 0; i < n; ++i)
+				blocks[i] = new Semaphore(0);
+			friends = new Friend[n];
+			int i = 0;
+			while ((nextLine = fileReader.readLine()) != null)
+			{
+				friends[i] = new Friend(i,blocks[i],Integer.parseInt(nextLine)); //create threads
+				++i;
+			}
+			fileReader.close();
+		}
+		
 		heap = new Heap(friends); //create heap
 		runningHeap = new Heap(n); //blank heap for running processes
 		for (int i = 0; i < n; ++i)
