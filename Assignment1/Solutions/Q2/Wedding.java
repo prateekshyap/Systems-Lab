@@ -14,24 +14,27 @@ class Friend extends Thread
 	private int[] requests; //sequence of requests
 	private Semaphore mutex; //semaphore for blocking
 	private Heap heap, runningHeap; //heap instance
+	private boolean isWriting;
 	Friend(int id, Semaphore mutex)
 	{
+		this.isWriting = false;
 		this.id = id;
 		//generate unique coupon no
-		this.couponNo = (int)(Math.random()*(999-100+1)+100);
+		this.couponNo = (int)(Math.random()*(110-100+1)+100);
 		while (Wedding.couponNos.contains(this.couponNo))
 			++this.couponNo;
 		Wedding.couponNos.add(this.couponNo);
-		this.requests = new int[(int)(Math.random()*(2-1+1)+1)]; //at most 3 requests
+		this.requests = new int[(int)(Math.random()*(3-1+1)+1)]; //at most 3 requests
 		for (int i = 0; i < this.requests.length; ++i)
 			this.requests[i] = (int)(Math.random()*(10-1+1)+1); //random number between 1 to 10
 		this.mutex = mutex;
 	}
 	Friend(int id, Semaphore mutex, int couponNo)
 	{
+		this.isWriting = false;
 		this.id = id;
 		this.couponNo = couponNo;
-		this.requests = new int[(int)(Math.random()*(2-1+1)+1)]; //at most 3 requests
+		this.requests = new int[(int)(Math.random()*(3-1+1)+1)]; //at most 3 requests
 		for (int i = 0; i < this.requests.length; ++i)
 			this.requests[i] = (int)(Math.random()*(10-1+1)+1); //random number between 1 to 10
 		this.mutex = mutex;
@@ -50,7 +53,15 @@ class Friend extends Thread
 				if (this.requests[i] > Wedding.readProb) //0.7 probability for reading
 					Wedding.readFromCard(this.id,this.couponNo);
 				else //0.3 for writing
-					Wedding.writeToCard(this.id,this.couponNo);
+				{
+					if (!this.isWriting)
+					{
+						this.isWriting = true;
+						Wedding.writeToCard(this.id,this.couponNo);
+					}
+					else
+						Wedding.readFromCard(this.id,this.couponNo);
+				}
 				Wedding.states[id] = false; //indicate completion of one request
 				if (i != requests.length-1) heap.putBack(this); //if more requests present, put it back to heap
 			}
@@ -268,10 +279,7 @@ class Wedding
 				states[temp.getThreadId()] = true; //set for execution
 				blocks[temp.getThreadId()].release(); //release the lock
 				Thread.sleep(2000); //wait for 3 seconds
-			}
-			Thread.sleep(10000);
-			for (int i = 0; i < n ; ++i)
-				blocks[i].release();
+			}//Thread.sleep(10000); for (int i = 0; i < n ; ++i) blocks[i].release();
 		}catch(InterruptedException e){}
 	}
 }

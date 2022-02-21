@@ -197,7 +197,7 @@ class Heap
 
 class Restaurant
 {
-	private static int max = 8, min = 1; //max BT, min BT for any order 
+	private static int max = 5, min = 1; //max BT, min BT for any order 
 	public static void main(String[] args)throws IOException
 	{
 		String line = "";
@@ -231,8 +231,18 @@ class Restaurant
 			for (i = 0; i < n; ++i)
 			{
 				arrivalTimestamps[i] = Integer.parseInt(tokens[i]);
-				burstTimes[i] = (int)(Math.random()*(max-min+1)+min);
+				//burstTimes[i] = (int)(Math.random()*(max-min+1)+min);
 			}
+			burstTimes[0] = 1;
+			burstTimes[1] = 2;
+			burstTimes[2] = 1;
+			burstTimes[3] = 3;
+			burstTimes[4] = 1;
+			burstTimes[5] = 2;
+			burstTimes[6] = 4;
+			burstTimes[7] = 5;
+			burstTimes[8] = 3;
+			burstTimes[9] = 1;
 			heap = new Heap(arrivalTimestamps,burstTimes); //create a heap
 
 			timer = heap.seeNextDish().getArrivalTime(); //get the arrival time of the first process which is going to arrive

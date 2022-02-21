@@ -139,6 +139,7 @@ class Resource
 	}
 }
 
+
 class Restaurant
 {
 	static int n = 0, m = 0;
