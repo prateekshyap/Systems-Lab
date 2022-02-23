@@ -77,13 +77,15 @@ class Block
 
 class Taj
 {
+    private static boolean devMode = false;
+    private static int bookingRequests = 0, noOfBlocks = 3, roomTypes = 3;
+    private static int[] requestEntries = null;
+    private static Block[] blocks = null;
     public static void main(String[] args)throws IOException
     {
-        boolean devMode = false;
         if (args.length > 0) devMode = Boolean.parseBoolean(args[0]);
-        int choice = 0, rem = 0, bookingRequests = 0, noOfBlocks = 3, roomTypes = 3, maxRooms = 10, minRooms = 1, maxRequests = 25, minRequests = 10, j = 0;
-        int[] satisfiedReq = null, requestEntries = null;
-        String inputFileName = "input.txt", outputFileName = "output.txt", temp = "";
+        int choice, maxRooms = 10, minRooms = 1, maxRequests = 25, minRequests = 10, j;
+        String inputFileName = "input.txt", outputFileName = "output.txt", temp;
         String[] managers = {"Aman", "Raj", "Alok"};
 
         BufferedReader cmdReader = new BufferedReader(new InputStreamReader(System.in));
@@ -135,7 +137,7 @@ class Taj
         //  Read input and store
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-        Block[] blocks = new Block[noOfBlocks];
+        blocks = new Block[noOfBlocks];
 
         //number of single, double and triple occupancy rooms
         String[] roomCount = fileReader.readLine().trim().split(" +");
@@ -153,108 +155,30 @@ class Taj
                                     tokens[i].equals("D") ? 1 :
                                         tokens[i].equals("T") ? 2 : -1;
 
-        int[] order = new int[roomTypes];
+        fileReader.close();
+
+        int[] order;
+        
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //  Simulations
+        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //  Aman's Allocation for block A (First Fit)
+        order = new int[roomTypes];
         order[0] = 2; //triple room
         order[1] = 0; //single room
         order[2] = 1; //double room
 
-        fileReader.close();
+        allocate(0,order,managers); //Aman
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //  Aman's Allocation for block A (First Fit)
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if (devMode)
-        {
-            System.out.println();
-            System.out.println("Aman (Block A)");
-        }
-        for (Integer request : requestEntries)
-        {
-            for (j = 0; j < roomTypes; ++j)
-            {
-                rem = blocks[0].getRemRoomsByIndex(order[j]); //get the first type of rooms available
-                if (rem > 0 && request <= order[j]) //if rooms are available and type of request can be satisfied with jth type of room
-                {
-                    blocks[0].setRemRoomsByIndex(order[j],rem-1); //reduce the count by 1
-                    blocks[0].setSatReqByIndex(request,blocks[0].getSatReqByIndex(request)+1); //increase request satisfied count
-                    break; //to stop after one allocation
-                }
-            }
-            if (devMode)
-            {
-                System.out.println("For request: "+(request+1));
-                blocks[0].printData();
-            }
-        }
-        if (devMode)
-        {
-            System.out.println();
-            blocks[0].printData();
-        }
-
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //  Raj's Allocation for block B
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if (devMode)
-        {
-            System.out.println();
-            System.out.println("Raj (Block B)");
-        }
-        for (Integer request : requestEntries)
-        {
-            for (j = roomTypes-1; j >= 0; --j)
-            {
-                rem = blocks[1].getRemRoomsByIndex(j); //get the worst fit rooms available
-                if (rem > 0 && request <= j) //if rooms are available and type of request can be satisfied with jth type of room
-                {
-                    blocks[1].setRemRoomsByIndex(j,rem-1); //reduce the count by 1
-                    blocks[1].setSatReqByIndex(request,blocks[1].getSatReqByIndex(request)+1); //increase request satisfied count
-                    break; //to stop after one allocation
-                }
-            }
-            if (devMode)
-            {
-                System.out.println("For request: "+(request+1));
-                blocks[1].printData();
-            }
-        }
-        if (devMode)
-        {
-            System.out.println();
-            blocks[1].printData();
-        }
+        for (int i = 0, k = roomTypes-1; i < roomTypes && k >= 0; ++i, --k)
+            order[i] = k;
+        allocate(1,order,managers); //Raj
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //  Alok's Allocation for block C
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if (devMode)
-        {
-            System.out.println();
-            System.out.println("Alok (Block C)");
-        }
-        for (Integer request : requestEntries)
-        {
-            for (j = request; j < roomTypes; ++j)
-            {
-                rem = blocks[2].getRemRoomsByIndex(j); //get the worst fit rooms available
-                if (rem > 0) //if rooms are available and type of request can be satisfied with jth type of room
-                {
-                    blocks[2].setRemRoomsByIndex(j,rem-1); //reduce the count by 1
-                    blocks[2].setSatReqByIndex(request,blocks[2].getSatReqByIndex(request)+1); //increase request satisfied count
-                    break; //to stop after one allocation
-                }
-            }
-            if (devMode)
-            {
-                System.out.println("For request: "+(request+1));
-                blocks[2].printData();
-            }
-        }
-        if (devMode)
-        {
-            System.out.println();
-            blocks[2].printData();
-        }
+        for (int i = 0; i < roomTypes; ++i)
+            order[i] = i;
+        allocate(2,order,managers); //Alok
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //  Optimal Solution
@@ -263,14 +187,14 @@ class Taj
         int[] requestsCount = new int[roomTypes]; //stores the total count of requests for each room type
         int[] rejectedRequests = new int[noOfBlocks]; //stores total number of requests rejected for each block
         long[] moneyWasted = new long[noOfBlocks]; //stores total money wasted for each block
-        int[] allocations = null;
+        int[] allocations;
         int[] prices = blocks[0].getPrices();
-        int optimalRevenue = 0, totalAllocations = 0, largerAvail = 0;
+        int optimalRevenue = 0, largerAvail = 0;
 
         for (int i = 0; i < bookingRequests; ++i)
             ++requestsCount[requestEntries[i]];
         for (int i = roomTypes-1; i >= 0; --i)
-        { //double req = 10, rooms = 4, alloc = 4 ( 8 , 10) (unalloc = 6, largeravail = 4, newAlloc = 4), (unalloc = 6, largeravail = 8, newAlloc = 6)
+        {
             optimalAllocation[i] = Math.min(requestsCount[i],Integer.parseInt(roomCount[i]));
             if (Integer.parseInt(roomCount[i]) > optimalAllocation[i])
                 largerAvail += Integer.parseInt(roomCount[i])-optimalAllocation[i];
@@ -282,7 +206,6 @@ class Taj
                 optimalAllocation[i] += newAlloc;
             }
             optimalRevenue += optimalAllocation[i]*prices[i];
-            totalAllocations += optimalAllocation[i];
         }
         for (int i = 0; i < noOfBlocks; ++i)
             moneyWasted[i] = optimalRevenue - blocks[i].getRevenueGenerated();
@@ -299,65 +222,54 @@ class Taj
         System.out.println();
         System.out.println("---------------------------------------------------------------------------------------------------------");
         fileString.append("---------------------------------------------------------------------------------------------------------\n");
-        System.out.println(managers[bestManager]+" is the best manager.");
-        fileString.append(managers[bestManager]+" is the best manager.\n");
+        System.out.println(managers[bestManager]+" is the best manager."); fileString.append(managers[bestManager]+" is the best manager.\n");
 
         System.out.println("---------------------------------------------------------------------------------------------------------");
         System.out.println("|       Manager Name      |    Revenue Generated    |       Money Wasted      |     No. of Requests     |");
         System.out.println("|                         |           (Rs)          |   because of Nature of  |   rejected because of   |");
         System.out.println("|                         |                         |       Manager (Rs)      |    wrong allotment of   |");
         System.out.println("|                         |                         |                         |         rooms           |");
-        System.out.println("---------------------------------------------------------------------------------------------------------");
+        System.out.println("|-------------------------|-------------------------|-------------------------|-------------------------|");
         fileString.append("---------------------------------------------------------------------------------------------------------\n");
         fileString.append("|       Manager Name      |    Revenue Generated    |       Money Wasted      |     No. of Requests     |\n");
         fileString.append("|                         |           (Rs)          |   because of Nature of  |   rejected because of   |\n");
         fileString.append("|                         |                         |       Manager (Rs)      |    wrong allotment of   |\n");
         fileString.append("|                         |                         |                         |         rooms           |\n");
-        fileString.append("---------------------------------------------------------------------------------------------------------\n");
+        fileString.append("|-------------------------|-------------------------|-------------------------|-------------------------|\n");
 
         for (int i = 0; i < noOfBlocks; ++i)
         {
-            System.out.print("|");
-            fileString.append("|");
+            System.out.print("|"); fileString.append("|");
 
-            System.out.print(" " + managers[i]);
-            fileString.append(" " + managers[i]);
+            System.out.print(" " + managers[i]); fileString.append(" " + managers[i]);
             for (j = 0; j < 24 - managers[i].length(); ++j)
             {
-                System.out.print(" ");
-                fileString.append(" ");
+                System.out.print(" "); fileString.append(" ");
             }
 
-            System.out.print("|");
-            fileString.append("|");
+            System.out.print("|"); fileString.append("|");
 
             String printStr = Long.toString(blocks[i].getRevenueGenerated());
             printStr += " (";
             for (j = 0; j < roomTypes; ++j)
                 printStr += (blocks[i].getSatReqByIndex(j)+" ");
             printStr += ")";
-            System.out.print(" " + printStr);
-            fileString.append(" " + printStr);
+            System.out.print(" " + printStr); fileString.append(" " + printStr);
             for (j = 0; j < 24 - printStr.length(); ++j)
             {
-                System.out.print(" ");
-                fileString.append(" ");
+                System.out.print(" "); fileString.append(" ");
             }
 
-            System.out.print("|");
-            fileString.append("|");
+            System.out.print("|"); fileString.append("|");
 
             printStr = Long.toString(moneyWasted[i]);
-            System.out.print(" " + printStr);
-            fileString.append(" " + printStr);
+            System.out.print(" " + printStr); fileString.append(" " + printStr);
             for (j = 0; j < 24 - printStr.length(); ++j)
             {
-                System.out.print(" ");
-                fileString.append(" ");
+                System.out.print(" "); fileString.append(" ");
             }
 
-            System.out.print("|");
-            fileString.append("|");
+            System.out.print("|"); fileString.append("|");
 
             allocations = blocks[i].getAllocations();
             for (j = 0; j < roomTypes; ++j)
@@ -367,75 +279,99 @@ class Taj
             for (j = 0; j < roomTypes; ++j)
                 printStr += (Math.max(0,optimalAllocation[j]-allocations[j])+" ");
             printStr += ")";
-            System.out.print(" " + printStr);
-            fileString.append(" " + printStr);
+            System.out.print(" " + printStr); fileString.append(" " + printStr);
             for (j = 0; j < 24 - printStr.length(); ++j)
             {
-                System.out.print(" ");
-                fileString.append(" ");
+                System.out.print(" "); fileString.append(" ");
             }
 
-            System.out.println("|");
-            fileString.append("|\n");
+            System.out.println("|"); //System.out.println("---------------------------------------------------------------------------------------------------------");
+            fileString.append("|\n"); //fileString.append("---------------------------------------------------------------------------------------------------------\n");
+
+            System.out.println("|-------------------------|-------------------------|-------------------------|-------------------------|");
+            fileString.append("|-------------------------|-------------------------|-------------------------|-------------------------|\n");
+
+        
         }
 
         //print the optimal allocation details
-        System.out.print("|");
-        fileString.append("|");
+        System.out.print("|"); fileString.append("|");
 
         for (j = 0; j < 25; ++j)
         {
-            System.out.print(" ");
-            fileString.append(" ");
+            System.out.print(" "); fileString.append(" ");
         }
 
-        System.out.print("|");
-        fileString.append("|");
+        System.out.print("|"); fileString.append("|");
 
         String printStr = Long.toString(optimalRevenue);
         printStr += " (";
         for (j = 0; j < roomTypes; ++j)
             printStr += (optimalAllocation[j]+" ");
         printStr += ")";
-        System.out.print(" " + printStr);
-        fileString.append(" " + printStr);
+        System.out.print(" " + printStr); fileString.append(" " + printStr);
         for (j = 0; j < 24 - printStr.length(); ++j)
         {
-            System.out.print(" ");
-            fileString.append(" ");
+            System.out.print(" "); fileString.append(" ");
         }
 
-        System.out.print("|");
-        fileString.append("|");
+        System.out.print("|"); fileString.append("|");
 
         printStr = "0";
-        System.out.print(" " + printStr);
-        fileString.append(" " + printStr);
+        System.out.print(" " + printStr); fileString.append(" " + printStr);
         for (j = 0; j < 24 - printStr.length(); ++j)
         {
-            System.out.print(" ");
-            fileString.append(" ");
+            System.out.print(" "); fileString.append(" ");
         }
 
-        System.out.print("|");
-        fileString.append("|");
+        System.out.print("|"); fileString.append("|");
 
         printStr = "0 (0 0 0 )";
-        System.out.print(" " + printStr);
-        fileString.append(" " + printStr);
+        System.out.print(" " + printStr); fileString.append(" " + printStr);
         for (j = 0; j < 24 - printStr.length(); ++j)
         {
-            System.out.print(" ");
-            fileString.append(" ");
+            System.out.print(" "); fileString.append(" ");
         }
 
-        System.out.println("|");
-        fileString.append("|\n");
+        System.out.println("|"); fileString.append("|\n");
 
         System.out.println("---------------------------------------------------------------------------------------------------------");
         fileString.append("---------------------------------------------------------------------------------------------------------\n");
 
         fileWriter.write(fileString.toString());
         fileWriter.close();
+    }
+
+    public static void allocate(int index, int[] order, String[] managers)
+    {
+        int rem = 0;
+        if (devMode)
+        {
+            System.out.println();
+            System.out.println(managers[index]+" (Block "+(char)(65+index)+")");
+        }
+        for (Integer request : requestEntries)
+        {
+            for (int j = 0; j < roomTypes; ++j)
+            {
+                rem = blocks[index].getRemRoomsByIndex(order[j]); //get the first type of rooms available
+                if (rem > 0 && request <= order[j]) //if rooms are available and type of request can be satisfied with jth type of room
+                {
+                    blocks[index].setRemRoomsByIndex(order[j],rem-1); //reduce the count by 1
+                    blocks[index].setSatReqByIndex(request,blocks[index].getSatReqByIndex(request)+1); //increase request satisfied count
+                    break; //to stop after one allocation
+                }
+            }
+            if (devMode)
+            {
+                System.out.println("For request: "+(request+1));
+                blocks[index].printData();
+            }
+        }
+        if (devMode)
+        {
+            System.out.println();
+            blocks[index].printData();
+        }
     }
 }
