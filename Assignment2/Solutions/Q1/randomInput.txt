@@ -1,0 +1,3 @@
+5 8 4
+17
+T T D T D T T D D T S S D S T S S
