@@ -1,0 +1,30 @@
+====================================================================================================================================
+Course = B.Tech
+-------------------------------------------------------------------------------------------------
+|   SID = B13   |   SID = B5    |   SID = B17   |   SID = B6    |   SID = B18   |   SID = B8    |
+|    BID = 1    |    BID = 4    |    BID = 2    |    BID = 1    |    BID = 1    |    BID = 1    |
+-------------------------------------------------------------------------------------------------
+Number of times the librarian has to go to search the entire book depo = 10
+ID of the subject for which the maximum number of books are issued = B5
+
+
+====================================================================================================================================
+Course = M.Tech
+-----------------------------------------------------------------
+|   SID = M7    |   SID = M1    |   SID = M3    |   SID = M6    |
+|    BID = 1    |    BID = 1    |    BID = 1    |    BID = 2    |
+-----------------------------------------------------------------
+Number of times the librarian has to go to search the entire book depo = 4
+ID of the subject for which the maximum number of books are issued = M6
+
+
+====================================================================================================================================
+Course = Ph.D
+-----------------------------------------------------------------
+|   SID = P7    |   SID = P14   |   SID = P12   |   SID = P2    |
+|    BID = 1    |    BID = 4    |    BID = 1    |    BID = 1    |
+-----------------------------------------------------------------
+Number of times the librarian has to go to search the entire book depo = 5
+ID of the subject for which the maximum number of books are issued = P14
+
+

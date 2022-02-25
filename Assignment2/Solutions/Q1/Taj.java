@@ -91,7 +91,7 @@ class Taj
         BufferedReader cmdReader = new BufferedReader(new InputStreamReader(System.in));
 
         System.out.println("========================================================");
-        System.out.println("                    WELCOME TO Hotel TAJ");
+        System.out.println("                 WELCOME TO HOTEL TAJ");
         System.out.println("========================================================");
 
         System.out.println("Enter 0 for random input/ 1 for manual input-");

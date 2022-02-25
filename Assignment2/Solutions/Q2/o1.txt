@@ -1,0 +1,30 @@
+====================================================================================================================================
+Course = B.Tech
+-----------------------------------------------------------------
+|   SID = B4    |   SID = B5    |   SID = B3    |   SID = B1    |
+|    BID = 3    |    BID = 2    |    BID = 3    |    BID = 5    |
+-----------------------------------------------------------------
+Number of times the librarian has to go to search the entire book depo = 4
+ID of the subject for which the maximum number of books are issued = B1
+
+
+====================================================================================================================================
+Course = M.Tech
+-----------------------------------------------------------------------------------------------------------------
+|   SID = M7    |   SID = M3    |   SID = M10   |   SID = M6    |   SID = M1    |   SID = M4    |   SID = M9    |
+|    BID = 1    |    BID = 3    |    BID = 2    |    BID = 4    |    BID = 4    |    BID = 3    |    BID = 2    |
+-----------------------------------------------------------------------------------------------------------------
+Number of times the librarian has to go to search the entire book depo = 7
+ID of the subject for which the maximum number of books are issued = M1
+
+
+====================================================================================================================================
+Course = Ph.D
+-------------------------------------------------------------------------------------------------
+|   SID = P17   |   SID = P12   |   SID = P1    |   SID = P9    |   SID = P6    |   SID = P7    |
+|    BID = 1    |    BID = 1    |    BID = 3    |    BID = 3    |    BID = 2    |    BID = 1    |
+-------------------------------------------------------------------------------------------------
+Number of times the librarian has to go to search the entire book depo = 7
+ID of the subject for which the maximum number of books are issued = P1
+
+
