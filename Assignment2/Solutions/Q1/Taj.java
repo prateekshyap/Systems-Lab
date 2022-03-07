@@ -26,10 +26,10 @@ class Block
 
     Block(int types, String[] counts, boolean mode)
     {
-        this.devMode = mode;
-        this.roomTypes = new int[types];
-        this.remainingRooms = new int[types];
-        this.satisfied = new int[types];
+        this.devMode = mode; //for developers mode
+        this.roomTypes = new int[types]; //number of available rooms
+        this.remainingRooms = new int[types]; //number of remaining rooms
+        this.satisfied = new int[types]; //request satisfied or not
 
         for (int i = 0; i < types; ++i)
         {
@@ -170,13 +170,13 @@ class Taj
 
         allocate(0,order,managers); //Aman
 
-        //  Raj's Allocation for block B
-        for (int i = 0, k = roomTypes-1; i < roomTypes && k >= 0; ++i, --k)
+        //  Raj's Allocation for block B (Worst Fit)
+        for (int i = 0, k = roomTypes-1; i < roomTypes && k >= 0; ++i, --k) //store rooms in descending order of their sizes
             order[i] = k;
         allocate(1,order,managers); //Raj
 
-        //  Alok's Allocation for block C
-        for (int i = 0; i < roomTypes; ++i)
+        //  Alok's Allocation for block C (Best Fit)
+        for (int i = 0; i < roomTypes; ++i) //store rooms in ascending order of their sizes
             order[i] = i;
         allocate(2,order,managers); //Alok
 
@@ -187,27 +187,28 @@ class Taj
         int[] requestsCount = new int[roomTypes]; //stores the total count of requests for each room type
         int[] rejectedRequests = new int[noOfBlocks]; //stores total number of requests rejected for each block
         long[] moneyWasted = new long[noOfBlocks]; //stores total money wasted for each block
-        int[] allocations;
-        int[] prices = blocks[0].getPrices();
+        int[] allocations; //
+        int[] prices = blocks[0].getPrices(); //get the prices for each room type
         int optimalRevenue = 0, largerAvail = 0;
 
+        //count the number of requests of each type
         for (int i = 0; i < bookingRequests; ++i)
             ++requestsCount[requestEntries[i]];
-        for (int i = roomTypes-1; i >= 0; --i)
+        for (int i = roomTypes-1; i >= 0; --i) //for each room type
         {
-            optimalAllocation[i] = Math.min(requestsCount[i],Integer.parseInt(roomCount[i]));
-            if (Integer.parseInt(roomCount[i]) > optimalAllocation[i])
-                largerAvail += Integer.parseInt(roomCount[i])-optimalAllocation[i];
-            if (requestsCount[i] > optimalAllocation[i])
+            optimalAllocation[i] = Math.min(requestsCount[i],Integer.parseInt(roomCount[i])); //get the maximum number of requests we can satisfy with the same room size
+            if (Integer.parseInt(roomCount[i]) > optimalAllocation[i]) //if empty rooms are there
+                largerAvail += Integer.parseInt(roomCount[i])-optimalAllocation[i]; //add it to largerAvail variable
+            if (requestsCount[i] > optimalAllocation[i]) //if there are more requests to be satisfied
             {
-                int unalloc = requestsCount[i]-optimalAllocation[i];
-                int newAlloc = Math.min(unalloc,largerAvail);
-                largerAvail -= newAlloc;
-                optimalAllocation[i] += newAlloc;
+                int unalloc = requestsCount[i]-optimalAllocation[i]; //get the number of requests that are not satisfied
+                int newAlloc = Math.min(unalloc,largerAvail); //get the number of requests we can satisfy with larger rooms
+                largerAvail -= newAlloc; //allocate larger rooms
+                optimalAllocation[i] += newAlloc; //update the number of requests satisfied
             }
-            optimalRevenue += optimalAllocation[i]*prices[i];
+            optimalRevenue += optimalAllocation[i]*prices[i]; //update revenue
         }
-        for (int i = 0; i < noOfBlocks; ++i)
+        for (int i = 0; i < noOfBlocks; ++i) //calculate the total money wasted
             moneyWasted[i] = optimalRevenue - blocks[i].getRevenueGenerated();
 
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -215,7 +216,7 @@ class Taj
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         StringBuffer fileString = new StringBuffer("");
         int bestManager = 0;
-        for (int i = 1; i < noOfBlocks; ++i)
+        for (int i = 1; i < noOfBlocks; ++i) //update who is the best manager in terms of profits generated
             if (blocks[i].getRevenueGenerated() > blocks[bestManager].getRevenueGenerated())
                 bestManager = i;
 
@@ -350,9 +351,9 @@ class Taj
             System.out.println();
             System.out.println(managers[index]+" (Block "+(char)(65+index)+")");
         }
-        for (Integer request : requestEntries)
+        for (Integer request : requestEntries) //for each request
         {
-            for (int j = 0; j < roomTypes; ++j)
+            for (int j = 0; j < roomTypes; ++j) //for each room type
             {
                 rem = blocks[index].getRemRoomsByIndex(order[j]); //get the first type of rooms available
                 if (rem > 0 && request <= order[j]) //if rooms are available and type of request can be satisfied with jth type of room

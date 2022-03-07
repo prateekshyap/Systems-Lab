@@ -31,7 +31,7 @@ class FileSystem
     {
         if (args.length > 0) devMode = Boolean.parseBoolean(args[0]);
         boolean isPresent = false, isDotEncountered = false, overWrite = true;
-        int blockNo, counter = 1, dotIndex = -1;
+        int blockNo, counter = 1, spaceIndex = -1;
         String currDir = "root", path;
         File rootDir = new File("root");
         File diskDir = new File("disk");
@@ -54,7 +54,7 @@ class FileSystem
 
             switch(commandTokens[0])
             {
-            case "help":
+            case "help": //displays all possible commands
                 System.out.println();
                 System.out.println(" List of commands those can be executed:");
                 System.out.println(" > cd <dirName>                     : enters into given directory");
@@ -71,23 +71,24 @@ class FileSystem
                 break;
 
             case "md": //creating a new directory
-                if (commandTokens.length < 2)
+                if (commandTokens.length < 2) //if less than two words, reject
                 {
                     System.out.println(" Invalid command format. Try 'help'.");
                     break;
                 }
+                //check if directory is already present
                 isPresent = false;
                 workingFile = new File(currDir);
                 for (String subFile : workingFile.list())
                 {
-                    if (subFile.equals(commandTokens[1]))
+                    if (subFile.equals(commandTokens[1])) //if present
                     {
-                        isPresent = true;
+                        isPresent = true; //mark it
                         System.out.println(" Directory already exists.");
                         break;
                     }
                 }
-                if (!isPresent)
+                if (!isPresent) //if not present, create
                 {
                     path = currDir;
                     path += "\\"+commandTokens[1];
@@ -97,25 +98,26 @@ class FileSystem
                 break;
 
             case "cd": //entering into a directory
-                if (commandTokens.length < 2)
+                if (commandTokens.length < 2) //if less than two words, reject
                 {
                     System.out.println(" Invalid command format. Try 'help'.");
                     break;
                 }
+                //check if directory is already present
                 isPresent = false;
                 workingFile = new File(currDir);
                 for (String subFile : workingFile.list())
                 {
-                    if (subFile.equals(commandTokens[1]))
+                    if (subFile.equals(commandTokens[1])) //if present
                     {
-                        isPresent = true;
+                        isPresent = true; //mark it
                         break;
                     }
                 }
-                if (isPresent)
-                    currDir += "\\"+commandTokens[1];
-                else
-                    System.out.println(" System cannot find the path specified.");
+                if (isPresent) //if present
+                    currDir += "\\"+commandTokens[1]; //update current directory
+                else //otherwise
+                    System.out.println(" System cannot find the path specified."); //print error message
                 break;
 
             case "cd..": //exiting from a directory
@@ -126,172 +128,177 @@ class FileSystem
                 break;
 
             case "mf": //creating a new file
-                if (commandTokens.length < 3)
+                if (commandTokens.length < 3) //if less than three words, reject
                 {
                     System.out.println(" Invalid command format. Try 'help'.");
                     break;
                 }
+                //check if file is already present
                 isPresent = false;
                 overWrite = true;
                 workingFile = new File(currDir);
                 for (String subFile : workingFile.list())
                 {
-                    if (subFile.equals(commandTokens[1]))
+                    if (subFile.equals(commandTokens[1])) //if present
                     {
-                        isPresent = true;
+                        isPresent = true; //mark it
                         break;
                     }
                 }
-                if (isPresent)
+                if (isPresent) //if present
                 {
-                    System.out.println(" File already exists. Want to overwrite? (Y/N)");
+                    System.out.println(" File already exists. Want to overwrite? (Y/N)"); //print message
                     line = cmdReader.readLine();
-                    while (!(line.equals("N") || line.equals("n") || line.equals("Y") || line.equals("y")))
+                    while (!(line.equals("N") || line.equals("n") || line.equals("Y") || line.equals("y"))) //till input is not matched with requirement
                     {
-                        if (line.equals("N") || line.equals("n")) { overWrite = false; break; }
-                        else if (line.equals("Y") || line.equals("y")) { overWrite = true; break; }
-                        else if (!(line.equals("Y") || line.equals("y"))) { System.out.println(" Invalid input, please try again!"); line = cmdReader.readLine(); }
+                        System.out.println(" Invalid input, please try again!"); //print error message
+                        line = cmdReader.readLine(); //ask for input again
                     }
+                    if (line.equals("N") || line.equals("n")) break; //if user enters n, break
                 }
-                if (!overWrite) break;
-                workingFile = new File(currDir+"\\"+commandTokens[1]);
+                workingFile = new File(currDir+"\\"+commandTokens[1]); //store the file path
                 workingFile.createNewFile();
                 filePath = currDir+"\\"+commandTokens[1];
                 fileWriter = new BufferedWriter(new FileWriter(new File(filePath)));
-                if (commandTokens.length == 3)
+                if (commandTokens.length == 3) //if single word input
                 {
-                    text = commandTokens[2].substring(1,commandTokens[2].length()-1);
-                    for (int i = 0; i < text.length(); i += 4)
+                    text = commandTokens[2].substring(1,commandTokens[2].length()-1); //extract the text
+                    for (int i = 0; i < text.length(); i += 4) //for each 4 letters
                     {
-                        blockNo = (int)(Math.random()*(1000000000));
-                        while (diskBlocks.contains(blockNo))
-                            blockNo = (blockNo+1)%1000000000;
-                        diskBlocks.add(blockNo);
-                        blockWriter = new BufferedWriter(new FileWriter(new File("disk\\"+blockNo+".txt")));
+                        blockNo = (int)(Math.random()*(1000000000)); //generate a random block number
+                        while (diskBlocks.contains(blockNo)) //if block is alredy occupied
+                            blockNo = (blockNo+1)%1000000000; //move ahead
+                        diskBlocks.add(blockNo); //add the block number to occupied list
+                        blockWriter = new BufferedWriter(new FileWriter(new File("disk\\"+blockNo+".txt"))); //write to block
                         if (i < text.length()-4) blockWriter.write(text.substring(i,i+4));
                         else blockWriter.write(text.substring(i));
                         blockWriter.close();
-                        fileWriter.write((counter++)+" "+blockNo+"\n");
+                        fileWriter.write((counter++)+" "+blockNo+"\n"); //write to file
                     }
                 }
-                else
+                else //if multi word input
                 {
-                    isDotEncountered = false;
+                    isDotEncountered = false; //find the position of the first dot encountered
                     for (int i = 0; i < command.length(); ++i)
                     {
-                        if (command.charAt(i) == '.')
+                        if (command.charAt(i) == '.') //if the current character is dot
                         {
-                            isDotEncountered = true;
-                            dotIndex = i;
+                            //isDotEncountered = true; //mark true
+                            //spaceIndex = i; //store the index of the dot
+                            spaceIndex = i;
+                            while (command.charAt(spaceIndex) != ' ') ++spaceIndex;
                             break;
                         }
                     }
-                    text = command.substring(dotIndex+6,command.length()-1);
-                    for (int i = 0; i < text.length(); i += 4)
+                    text = command.substring(spaceIndex+2,command.length()-1); //extract the whole text after the first double quote that comes after the dot
+                    for (int i = 0; i < text.length(); i += 4) //for each 4 letters
                     {
-                        blockNo = (int)(Math.random()*(1000000000));
-                        while (diskBlocks.contains(blockNo))
-                            blockNo = (blockNo+1)%1000000000;
-                        diskBlocks.add(blockNo);
-                        blockWriter = new BufferedWriter(new FileWriter(new File("disk\\"+blockNo+".txt")));
+                        blockNo = (int)(Math.random()*(1000000000)); //generate a random block number
+                        while (diskBlocks.contains(blockNo)) //if block is already occupied
+                            blockNo = (blockNo+1)%1000000000; //move ahead
+                        diskBlocks.add(blockNo); //add the block number to occupied list
+                        blockWriter = new BufferedWriter(new FileWriter(new File("disk\\"+blockNo+".txt"))); //write to block
                         if (i < text.length()-4) blockWriter.write(text.substring(i,i+4));
                         else blockWriter.write(text.substring(i));
                         blockWriter.close();
-                        fileWriter.write((counter++)+" "+blockNo+"\n");
+                        fileWriter.write((counter++)+" "+blockNo+"\n"); //write to file
                     }
                 }
                 fileWriter.close();
                 break;
 
             case "df": //deleting a file
-                if (commandTokens.length < 2)
+                if (commandTokens.length < 2) //if less than two words, reject
                 {
                     System.out.println(" Invalid command format. Try 'help'.");
                     break;
                 }
+                //check if file is already present
                 isPresent = false;
                 workingFile = new File(currDir);
                 for (String subFile : workingFile.list())
                 {
-                    if (subFile.equals(commandTokens[1]))
+                    if (subFile.equals(commandTokens[1])) //if present
                     {
-                        isPresent = true;
+                        isPresent = true; //mark it
                         break;
                     }
                 }
-                if (!isPresent)
+                if (!isPresent) //if not present
                 {
-                    System.out.println(" File not found!");
+                    System.out.println(" File not found!"); //print error message
                     break;
                 }
-                workingFile = new File(currDir+"\\"+commandTokens[1]);
+                workingFile = new File(currDir+"\\"+commandTokens[1]); //get the file path
                 fileReader = new BufferedReader(new FileReader(workingFile));
-                while ((line = fileReader.readLine()) != null)
+                while ((line = fileReader.readLine()) != null) //for each disk block
                 {
                     contentTokens = line.split(" +");
-                    diskFile = new File("disk\\"+contentTokens[1]+".txt");
-                    diskFile.delete();
+                    diskFile = new File("disk\\"+contentTokens[1]+".txt"); //get the block path
+                    diskFile.delete(); //delete the block
                 }
                 fileReader.close();
-                workingFile.delete();                
+                workingFile.delete(); //delete the file
                 break;
 
             case "rf": //renaming a file
-                if (commandTokens.length < 3)
+                if (commandTokens.length < 3) //if less than three words, reject
                 {
                     System.out.println(" Invalid command format. Try 'help'.");
                     break;
                 }
+                //check if file is already present
                 isPresent = false;
                 workingFile = new File(currDir);
                 for (String subFile : workingFile.list())
                 {
-                    if (subFile.equals(commandTokens[1]))
+                    if (subFile.equals(commandTokens[1])) //if present
                     {
-                        isPresent = true;
+                        isPresent = true; //mark it
                         break;
                     }
                 }
-                if (!isPresent)
+                if (!isPresent) //if not present
                 {
-                    System.out.println(" File not found!");
+                    System.out.println(" File not found!"); //print error message
                     break;
                 }
-                filePath = currDir+"\\"+commandTokens[1];
+                filePath = currDir+"\\"+commandTokens[1]; //get the old file path
                 workingFile = new File(filePath);
-                filePath = currDir+"\\"+commandTokens[2];
+                filePath = currDir+"\\"+commandTokens[2]; //get the new file path
                 newFile = new File(filePath);
-                workingFile.renameTo(newFile);
+                workingFile.renameTo(newFile); //rename file
                 break;
 
             case "pf": //displaying the contents of a file
-                if (commandTokens.length < 2)
+                if (commandTokens.length < 2) //if less than two words, reject
                 {
                     System.out.println(" Invalid command format. Try 'help'.");
                     break;
                 }
+                //check if file is already present
                 isPresent = false;
                 workingFile = new File(currDir);
                 for (String subFile : workingFile.list())
                 {
-                    if (subFile.equals(commandTokens[1]))
+                    if (subFile.equals(commandTokens[1])) //if present
                     {
-                        isPresent = true;
+                        isPresent = true; //mark it
                         break;
                     }
                 }
-                if (!isPresent)
+                if (!isPresent) //if not present
                 {
-                    System.out.println(" File not found!");
+                    System.out.println(" File not found!"); //print error message
                     break;
                 }
-                filePath = currDir+"\\"+commandTokens[1];
+                filePath = currDir+"\\"+commandTokens[1]; //get the file path
                 fileReader = new BufferedReader(new FileReader(new File(filePath)));
-                while ((line = fileReader.readLine()) != null)
+                while ((line = fileReader.readLine()) != null) //for each block
                 {
                     contentTokens = line.split(" +");
-                    blockReader = new BufferedReader(new FileReader(new File("disk\\"+contentTokens[1]+".txt")));
-                    System.out.print(blockReader.readLine());
+                    blockReader = new BufferedReader(new FileReader(new File("disk\\"+contentTokens[1]+".txt"))); //get the block path
+                    System.out.print(blockReader.readLine()); //print the block contents
                     blockReader.close();
                 }
                 fileReader.close();

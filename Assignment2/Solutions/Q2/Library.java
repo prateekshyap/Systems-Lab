@@ -26,8 +26,8 @@ class Book
         this.trayIndex = -1; //stores the current tray index
     }
 
-    public int getParamByIndex(int index) { return params[index]; }
-    public void setParamByIndex(int index, int data) { this.params[index] = data; }
+    public int getParamByIndex(int index) { return params[index]; } //get parameter by index
+    public void setParamByIndex(int index, int data) { this.params[index] = data; } //set parameter by index
 
     public String getSubjectId() { return subjectId; }
     public void setSubjectId(String subjectId) { this.subjectId = subjectId; }
@@ -48,18 +48,18 @@ class Tray
     Tray(int order, int noOfSubjects, int capacity, String[] requests)
     {
         this.capacity = capacity;
-        this.size = 0;
-        this.heapifyIndex = order;
-        this.timer = 0;
+        this.size = 0; //since initially tray is empty
+        this.heapifyIndex = order; //1 = fifo (heapify based on the initial time stamp), 2 = lfu (heapify based on frequency), 3 = lru (heapify based on latest time stamp)
+        this.timer = 0; //reset timer to 0
         this.pageFaults = 0;
         this.booksTray = new Book[capacity];
         this.isBookInTray = new HashSet<String>();
         this.depo = new HashMap<String,Book>();
 
         int index = 1;
-        for (String request : requests)
-            if ((request.charAt(0) == 'B' && heapifyIndex == 1) || (request.charAt(0) == 'M' && heapifyIndex == 2) || (request.charAt(0) == 'P' && heapifyIndex == 3))
-                depo.put(request,new Book(index++,request));
+        for (String request : requests) //for each request
+            if ((request.charAt(0) == 'B' && heapifyIndex == 1) || (request.charAt(0) == 'M' && heapifyIndex == 2) || (request.charAt(0) == 'P' && heapifyIndex == 3)) //according to the type
+                depo.put(request,new Book(index++,request)); //add to depo
     }
     private int left(int i) { return (2*i)+1; } //standard left child method
     private int right(int i) { return (2*i)+2; } //standard right child method
@@ -69,16 +69,16 @@ class Tray
         int min = root;
         if (left(root) < size)
         {
-            if (booksTray[left(root)].getParamByIndex(heapifyIndex) < booksTray[min].getParamByIndex(heapifyIndex))
+            if (booksTray[left(root)].getParamByIndex(heapifyIndex) < booksTray[min].getParamByIndex(heapifyIndex)) //based on the required parameter
                 min = left(root);
-            else if (booksTray[left(root)].getParamByIndex(heapifyIndex) == booksTray[min].getParamByIndex(heapifyIndex) && booksTray[left(root)].getParamByIndex(1) < booksTray[min].getParamByIndex(1))
+            else if (booksTray[left(root)].getParamByIndex(heapifyIndex) == booksTray[min].getParamByIndex(heapifyIndex) && booksTray[left(root)].getParamByIndex(1) < booksTray[min].getParamByIndex(1)) //tie breaker is initial time stamp
                 min = left(root);
         }
         if (right(root) < size)
         {
-            if (booksTray[right(root)].getParamByIndex(heapifyIndex) < booksTray[min].getParamByIndex(heapifyIndex))
+            if (booksTray[right(root)].getParamByIndex(heapifyIndex) < booksTray[min].getParamByIndex(heapifyIndex)) //based on the required parameter
                 min = right(root);
-            else if (booksTray[right(root)].getParamByIndex(heapifyIndex) == booksTray[min].getParamByIndex(heapifyIndex) && booksTray[right(root)].getParamByIndex(1) < booksTray[min].getParamByIndex(1))
+            else if (booksTray[right(root)].getParamByIndex(heapifyIndex) == booksTray[min].getParamByIndex(heapifyIndex) && booksTray[right(root)].getParamByIndex(1) < booksTray[min].getParamByIndex(1)) //tie breaker is initial time stamp
                 min = right(root);
         }
         if (min != root)
@@ -94,26 +94,26 @@ class Tray
     public void issue(String subjectId)
     {
         int i = -1;
-        if (isBookInTray.contains(subjectId))
+        if (isBookInTray.contains(subjectId)) //if the requested book is already in the tray
         {
-            int trayIndex = depo.get(subjectId).getTrayIndex();
-            booksTray[trayIndex].setParamByIndex(2,booksTray[trayIndex].getParamByIndex(2)+1); //frequency
-            booksTray[trayIndex].setParamByIndex(3,timer++); //latest time stamp
-            heapify(trayIndex);
+            int trayIndex = depo.get(subjectId).getTrayIndex(); //get the index at which it is present
+            booksTray[trayIndex].setParamByIndex(2,booksTray[trayIndex].getParamByIndex(2)+1); //update frequency
+            booksTray[trayIndex].setParamByIndex(3,timer++); //update latest time stamp
+            heapify(trayIndex); //heapify
         }
-        else
+        else //if book is not present
         {
-            ++pageFaults;
-            if (size == capacity) evict();
-            booksTray[size] = depo.get(subjectId);
-            booksTray[size].setTrayIndex(size);
-            isBookInTray.add(subjectId);
-            booksTray[size].setParamByIndex(1,timer); //initial time stamp
-            booksTray[size].setParamByIndex(2,booksTray[size].getParamByIndex(2)+1); //frequency
-            booksTray[size].setParamByIndex(3,timer++); //latest time stamp
+            ++pageFaults; //increase the number of page faults
+            if (size == capacity) evict(); //if tray is full, remove a book as per requirement
+            booksTray[size] = depo.get(subjectId); //get the required book from depo
+            booksTray[size].setTrayIndex(size); //update the new tray index
+            isBookInTray.add(subjectId); //update the set
+            booksTray[size].setParamByIndex(1,timer); //set initial time stamp
+            booksTray[size].setParamByIndex(2,booksTray[size].getParamByIndex(2)+1); //update frequency
+            booksTray[size].setParamByIndex(3,timer++); //update latest time stamp
             i = size++;
             Book book = null;
-            while (parent(i) >= 0 && ((booksTray[parent(i)].getParamByIndex(heapifyIndex) > booksTray[i].getParamByIndex(heapifyIndex)) || (booksTray[parent(i)].getParamByIndex(heapifyIndex) == booksTray[i].getParamByIndex(heapifyIndex) && booksTray[parent(i)].getParamByIndex(1) > booksTray[i].getParamByIndex(1))))
+            while (parent(i) >= 0 && ((booksTray[parent(i)].getParamByIndex(heapifyIndex) > booksTray[i].getParamByIndex(heapifyIndex)) || (booksTray[parent(i)].getParamByIndex(heapifyIndex) == booksTray[i].getParamByIndex(heapifyIndex) && booksTray[parent(i)].getParamByIndex(1) > booksTray[i].getParamByIndex(1)))) //standard decrease key method
             {
                 book = booksTray[i];
                 booksTray[i] = booksTray[parent(i)];
@@ -131,6 +131,7 @@ class Tray
     }
     public Book evict()
     {
+        //standard extract root method
         Book result = booksTray[0];
         booksTray[0] = booksTray[--size];
         booksTray[0].setTrayIndex(0);
@@ -333,25 +334,26 @@ class Library
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         //  Simulations
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //create trays for each course
         trays = new Tray[noOfCourses];
         for (int i = 0; i < noOfCourses; ++i)
             trays[i] = new Tray(i+1,noOfSubjects[i],trayCapacity[i],requestEntries);
 
-        for (String request : requestEntries)
+        for (String request : requestEntries) //for each request
         {
-            if (request.charAt(0) == 'B') trays[0].issue(request);
-            else if (request.charAt(0) == 'M') trays[1].issue(request);
-            else if (request.charAt(0) == 'P') trays[2].issue(request);
+            if (request.charAt(0) == 'B') trays[0].issue(request); //for btech
+            else if (request.charAt(0) == 'M') trays[1].issue(request); //for mtech
+            else if (request.charAt(0) == 'P') trays[2].issue(request); //for phd
         }
 
         StringBuffer printString = new StringBuffer("");
-        for (int i = 0; i < noOfCourses; ++i)
+        for (int i = 0; i < noOfCourses; ++i) //for each course
         {
             System.out.println("====================================================================================================================================");
             printString.append("====================================================================================================================================\n");
-            System.out.println("Course = "+courses[i]);
+            System.out.println("Course = "+courses[i]); //print the course
             printString.append("Course = "+courses[i]+"\n");
-            trays[i].printTray(printString);
+            trays[i].printTray(printString); //print final tray
         }
 
         fileWriter.write(printString.toString());
