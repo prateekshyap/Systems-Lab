@@ -43,7 +43,7 @@ class FileSystem
         BufferedReader fileReader = null, blockReader = null;
         BufferedWriter fileWriter = null, blockWriter = null;
 
-        System.out.println("WELCOME TO MY FILE SYSTEM");
+        System.out.println("WELCOME TO SIMPLE FILE SYSTEM");
 
         while (true)
         {
@@ -186,11 +186,11 @@ class FileSystem
                             //isDotEncountered = true; //mark true
                             //spaceIndex = i; //store the index of the dot
                             spaceIndex = i;
-                            while (command.charAt(spaceIndex) != ' ') ++spaceIndex;
+                            while (command.charAt(spaceIndex) != '"') ++spaceIndex;
                             break;
                         }
                     }
-                    text = command.substring(spaceIndex+2,command.length()-1); //extract the whole text after the first double quote that comes after the dot
+                    text = command.substring(spaceIndex+1,command.length()-1); //extract the whole text after the first double quote that comes after the dot
                     for (int i = 0; i < text.length(); i += 4) //for each 4 letters
                     {
                         blockNo = (int)(Math.random()*(1000000000)); //generate a random block number
