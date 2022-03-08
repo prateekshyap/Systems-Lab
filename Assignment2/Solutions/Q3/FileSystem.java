@@ -36,7 +36,7 @@ class FileSystem
         File rootDir = new File("root");
         File diskDir = new File("disk");
         File workingFile = null, newFile = null, diskFile = null;
-        String command = "", filePath = "", text = "", line = "";
+        String command = "", filePath = "", text = "", line = "", fileSeparator = String.valueOf(File.separatorChar);
         String[] commandTokens = null, pathTokens = null, fileTokens = null, contentTokens = null;
 
         BufferedReader cmdReader = new BufferedReader(new InputStreamReader(System.in));
@@ -91,7 +91,7 @@ class FileSystem
                 if (!isPresent) //if not present, create
                 {
                     path = currDir;
-                    path += "\\"+commandTokens[1];
+                    path += fileSeparator+commandTokens[1];
                     workingFile = new File(path);
                     workingFile.mkdirs();
                 }
@@ -115,16 +115,16 @@ class FileSystem
                     }
                 }
                 if (isPresent) //if present
-                    currDir += "\\"+commandTokens[1]; //update current directory
+                    currDir += fileSeparator+commandTokens[1]; //update current directory
                 else //otherwise
                     System.out.println(" System cannot find the path specified."); //print error message
                 break;
 
             case "cd..": //exiting from a directory
-                pathTokens = currDir.split("\\\\");
+                pathTokens = currDir.split(fileSeparator);
                 currDir = "root";
                 for (int i = 1; i < pathTokens.length-1; ++i)
-                    currDir += "\\"+pathTokens[i];
+                    currDir += fileSeparator+pathTokens[i];
                 break;
 
             case "mf": //creating a new file
@@ -156,9 +156,9 @@ class FileSystem
                     }
                     if (line.equals("N") || line.equals("n")) break; //if user enters n, break
                 }
-                workingFile = new File(currDir+"\\"+commandTokens[1]); //store the file path
+                workingFile = new File(currDir+fileSeparator+commandTokens[1]); //store the file path
                 workingFile.createNewFile();
-                filePath = currDir+"\\"+commandTokens[1];
+                filePath = currDir+fileSeparator+commandTokens[1];
                 fileWriter = new BufferedWriter(new FileWriter(new File(filePath)));
                 if (commandTokens.length == 3) //if single word input
                 {
@@ -169,7 +169,7 @@ class FileSystem
                         while (diskBlocks.contains(blockNo)) //if block is alredy occupied
                             blockNo = (blockNo+1)%1000000000; //move ahead
                         diskBlocks.add(blockNo); //add the block number to occupied list
-                        blockWriter = new BufferedWriter(new FileWriter(new File("disk\\"+blockNo+".txt"))); //write to block
+                        blockWriter = new BufferedWriter(new FileWriter(new File("disk"+fileSeparator+blockNo+".txt"))); //write to block
                         if (i < text.length()-4) blockWriter.write(text.substring(i,i+4));
                         else blockWriter.write(text.substring(i));
                         blockWriter.close();
@@ -197,7 +197,7 @@ class FileSystem
                         while (diskBlocks.contains(blockNo)) //if block is already occupied
                             blockNo = (blockNo+1)%1000000000; //move ahead
                         diskBlocks.add(blockNo); //add the block number to occupied list
-                        blockWriter = new BufferedWriter(new FileWriter(new File("disk\\"+blockNo+".txt"))); //write to block
+                        blockWriter = new BufferedWriter(new FileWriter(new File("disk"+fileSeparator+blockNo+".txt"))); //write to block
                         if (i < text.length()-4) blockWriter.write(text.substring(i,i+4));
                         else blockWriter.write(text.substring(i));
                         blockWriter.close();
@@ -229,12 +229,12 @@ class FileSystem
                     System.out.println(" File not found!"); //print error message
                     break;
                 }
-                workingFile = new File(currDir+"\\"+commandTokens[1]); //get the file path
+                workingFile = new File(currDir+fileSeparator+commandTokens[1]); //get the file path
                 fileReader = new BufferedReader(new FileReader(workingFile));
                 while ((line = fileReader.readLine()) != null) //for each disk block
                 {
                     contentTokens = line.split(" +");
-                    diskFile = new File("disk\\"+contentTokens[1]+".txt"); //get the block path
+                    diskFile = new File("disk"+fileSeparator+contentTokens[1]+".txt"); //get the block path
                     diskFile.delete(); //delete the block
                 }
                 fileReader.close();
@@ -263,9 +263,9 @@ class FileSystem
                     System.out.println(" File not found!"); //print error message
                     break;
                 }
-                filePath = currDir+"\\"+commandTokens[1]; //get the old file path
+                filePath = currDir+fileSeparator+commandTokens[1]; //get the old file path
                 workingFile = new File(filePath);
-                filePath = currDir+"\\"+commandTokens[2]; //get the new file path
+                filePath = currDir+fileSeparator+commandTokens[2]; //get the new file path
                 newFile = new File(filePath);
                 workingFile.renameTo(newFile); //rename file
                 break;
@@ -292,12 +292,12 @@ class FileSystem
                     System.out.println(" File not found!"); //print error message
                     break;
                 }
-                filePath = currDir+"\\"+commandTokens[1]; //get the file path
+                filePath = currDir+fileSeparator+commandTokens[1]; //get the file path
                 fileReader = new BufferedReader(new FileReader(new File(filePath)));
                 while ((line = fileReader.readLine()) != null) //for each block
                 {
                     contentTokens = line.split(" +");
-                    blockReader = new BufferedReader(new FileReader(new File("disk\\"+contentTokens[1]+".txt"))); //get the block path
+                    blockReader = new BufferedReader(new FileReader(new File("disk"+fileSeparator+contentTokens[1]+".txt"))); //get the block path
                     System.out.print(blockReader.readLine()); //print the block contents
                     blockReader.close();
                 }

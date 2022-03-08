@@ -1,0 +1,3 @@
+7 1 4
+16
+D S D T S S D T T S T S D T D T
