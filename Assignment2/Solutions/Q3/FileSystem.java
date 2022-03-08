@@ -36,7 +36,7 @@ class FileSystem
         File rootDir = new File("root");
         File diskDir = new File("disk");
         File workingFile = null, newFile = null, diskFile = null;
-        String command = "", filePath = "", text = "", line = "", fileSeparator = String.valueOf(File.separatorChar);
+        String command = "", filePath = "", text = "", line = "", fileSeparator = String.valueOf(File.separatorChar), newSeparator = "";
         String[] commandTokens = null, pathTokens = null, fileTokens = null, contentTokens = null;
 
         BufferedReader cmdReader = new BufferedReader(new InputStreamReader(System.in));
@@ -121,7 +121,9 @@ class FileSystem
                 break;
 
             case "cd..": //exiting from a directory
-                pathTokens = currDir.split(fileSeparator);
+                //pathTokens = currDir.split(fileSeparator);
+                newSeparator = File.separator.replace("\\","\\\\");
+                pathTokens = currDir.split(newSeparator);
                 currDir = "root";
                 for (int i = 1; i < pathTokens.length-1; ++i)
                     currDir += fileSeparator+pathTokens[i];
