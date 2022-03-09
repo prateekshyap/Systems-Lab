@@ -230,13 +230,35 @@ class Tray
             if (book.getParamByIndex(2) > maxFreq)
             {
                 maxFreq = book.getParamByIndex(2);
-                maxFreqBook = book;
+                //maxFreqBook = book;
             }
         }
-        System.out.println("ID of the subject for which the maximum number of books are issued = "+maxFreqBook.getSubjectId());
+        System.out.print("ID of the subject for which the maximum number of books are issued = ");
+        iterator = depo.entrySet().iterator();
+        while (iterator.hasNext())
+        {
+            Map.Entry bookEntry = (Map.Entry)iterator.next();
+            book = (Book)bookEntry.getValue();
+            if ((Integer)book.getParamByIndex(2) == maxFreq)
+            {
+                System.out.print(book.getSubjectId()+" ");
+            }
+        }
         System.out.println();
         System.out.println();
-        buffer.append("ID of the subject for which the maximum number of books are issued = "+maxFreqBook.getSubjectId()+"\n");
+        System.out.println();
+        buffer.append("ID of the subject for which the maximum number of books are issued = ");
+        iterator = depo.entrySet().iterator();
+        while (iterator.hasNext())
+        {
+            Map.Entry bookEntry = (Map.Entry)iterator.next();
+            book = (Book)bookEntry.getValue();
+            if ((Integer)book.getParamByIndex(2) == maxFreq)
+            {
+                buffer.append(book.getSubjectId()+" ");
+            }
+        }
+        buffer.append("\n");
         buffer.append("\n");
         buffer.append("\n");
     }
