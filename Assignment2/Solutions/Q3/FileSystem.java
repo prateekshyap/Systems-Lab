@@ -206,6 +206,7 @@ class FileSystem
                         fileWriter.write((counter++)+" "+blockNo+"\n"); //write to file
                     }
                 }
+                fileWriter.write((inodeCounter++)+"\n");
                 fileWriter.close();
                 break;
 
@@ -299,9 +300,12 @@ class FileSystem
                 while ((line = fileReader.readLine()) != null) //for each block
                 {
                     contentTokens = line.split(" +");
-                    blockReader = new BufferedReader(new FileReader(new File("disk"+fileSeparator+contentTokens[1]+".txt"))); //get the block path
-                    System.out.print(blockReader.readLine()); //print the block contents
-                    blockReader.close();
+                    if (contentTokens.length >= 2)
+                    {
+                        blockReader = new BufferedReader(new FileReader(new File("disk"+fileSeparator+contentTokens[1]+".txt"))); //get the block path
+                        System.out.print(blockReader.readLine()); //print the block contents
+                        blockReader.close();
+                    }
                 }
                 fileReader.close();
                 break;
@@ -309,7 +313,14 @@ class FileSystem
             case "ls": //display all the file names
                 fileTokens = new File(currDir).list();
                 for (String file : fileTokens)
-                    System.out.println(" "+file);
+                {
+                    fileReader = new BufferedReader(new FileReader(new File(currDir+fileSeparator+file)));
+                    String prevLine = "";
+                    while ((line = fileReader.readLine()) != null)
+                        prevLine = line;
+                    System.out.println(prevLine+"\t"+file);
+                    fileReader.close();
+                }
                 break;
 
             case "exit":
