@@ -1,0 +1,5 @@
+PING 104.244.42.1 (104.244.42.1) 2048(2076) bytes of data.
+
+--- 104.244.42.1 ping statistics ---
+5 packets transmitted, 0 received, 100% packet loss, time 4093ms
+

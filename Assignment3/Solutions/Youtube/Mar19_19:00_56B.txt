@@ -1,0 +1,5 @@
+PING 142.250.64.110 (142.250.64.110) 56(84) bytes of data.
+
+--- 142.250.64.110 ping statistics ---
+5 packets transmitted, 4 received, 20% packet loss, time 4028ms
+rtt min/avg/max/mdev = 432.333/702.229/920.129/199.312 ms

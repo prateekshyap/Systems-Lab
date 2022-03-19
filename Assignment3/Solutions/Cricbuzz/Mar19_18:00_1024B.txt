@@ -1,0 +1,5 @@
+PING 23.33.238.186 (23.33.238.186) 1024(1052) bytes of data.
+
+--- 23.33.238.186 ping statistics ---
+5 packets transmitted, 5 received, 0% packet loss, time 4004ms
+rtt min/avg/max/mdev = 404.951/610.474/838.111/167.188 ms
