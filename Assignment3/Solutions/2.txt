@@ -1,3 +1,0 @@
-IP,LOC,SERVER,DATE,M,A,E,PACKET_SIZE,RTT
-142.93.212.183,Bangalore,in-do.metercdn.net(digitalocean)		
-176.32.103.205,Ashburn,amazon.com

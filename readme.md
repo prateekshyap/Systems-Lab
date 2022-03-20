@@ -15,5 +15,13 @@ Email us in case any doubts.
    * Q1: Memory Allocation
    * Q2: Page Replacement
    * Q3: File System
+3. ___Assignment 03 (Network Diagnostic Commands)___ [Question PDF](/Assignment3/Questions/CS558_Assignment%201%20-%20Basic%20Unix%20Command.pdf)
+   * Q1: ````ping```` command
+   * Q2: ````ping```` with multiple hosts
+   * Q3: ````ifconfig```` and ````route```` commands
+   * Q4: ````netstat```` command
+   * Q5: ````traceroute```` command
+   * Q6: Network Address
+   * Q7: LAN Analysis
 -----------------
 THE END

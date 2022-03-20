@@ -1,5 +1,0 @@
-PING 104.16.123.37 (104.16.123.37) 2048(2076) bytes of data.
-
---- 104.16.123.37 ping statistics ---
-5 packets transmitted, 1 received, 80% packet loss, time 4076ms
-rtt min/avg/max/mdev = 506.172/506.172/506.172/0.000 ms
