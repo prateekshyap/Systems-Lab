@@ -1,0 +1,5 @@
+PING 2a03:2880:f212:e5:face:b00c:0:4420(2a03:2880:f212:e5:face:b00c:0:4420) 128 data bytes
+
+--- 2a03:2880:f212:e5:face:b00c:0:4420 ping statistics ---
+25 packets transmitted, 25 received, 0% packet loss, time 24018ms
+rtt min/avg/max/mdev = 293.578/575.240/1010.224/147.552 ms, pipe 2

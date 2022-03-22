@@ -1,0 +1,5 @@
+PING 142.250.64.110 (142.250.64.110) 1024(1052) bytes of data.
+
+--- 142.250.64.110 ping statistics ---
+25 packets transmitted, 0 received, 100% packet loss, time 24202ms
+

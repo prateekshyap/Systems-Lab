@@ -1,0 +1,5 @@
+PING 163.53.78.110 (163.53.78.110) 256(284) bytes of data.
+
+--- 163.53.78.110 ping statistics ---
+25 packets transmitted, 25 received, 0% packet loss, time 24035ms
+rtt min/avg/max/mdev = 81.714/141.428/414.142/90.340 ms
