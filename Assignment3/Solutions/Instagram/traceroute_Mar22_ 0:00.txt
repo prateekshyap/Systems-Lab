@@ -1,0 +1,23 @@
+traceroute to 2a03:2880:f212:e5:face:b00c:0:4420 (2a03:2880:f212:e5:face:b00c:0:4420), 30 hops max, 80 byte packets
+ 1  2401:4900:3a79:a889::d (2401:4900:3a79:a889::d)  2.625 ms  2.945 ms  2.907 ms
+ 2  * * *
+ 3  2401:4900:50:8::1:4ed (2401:4900:50:8::1:4ed)  205.700 ms  205.661 ms  205.623 ms
+ 4  2404:a800:4a00:800::5 (2404:a800:4a00:800::5)  205.968 ms  206.130 ms  206.091 ms
+ 5  2404:a800::158 (2404:a800::158)  533.711 ms  533.673 ms  533.634 ms
+ 6  as6939.paixny.he.net (2001:504:f::39)  533.594 ms  829.509 ms  829.153 ms
+ 7  eqix-ny9.facebook.com (2001:504:f::3:2934:2)  829.685 ms  829.649 ms  829.610 ms
+ 8  po104.psw03.lga3.tfbnw.net (2620:0:1cff:dead:bef0::24f)  828.996 ms po104.psw02.lga3.tfbnw.net (2620:0:1cff:dead:bef0::235)  828.960 ms po104.psw03.lga3.tfbnw.net (2620:0:1cff:dead:bef0::24f)  828.927 ms
+ 9  po5.msw1ae.01.lga3.tfbnw.net (2a03:2880:f012:ffff::2d9)  828.892 ms po7.msw1ai.01.lga3.tfbnw.net (2a03:2880:f012:ffff::349)  502.518 ms po5.msw1ab.01.lga3.tfbnw.net (2a03:2880:f012:ffff::2d3)  502.443 ms
+10  instagram-p426-shv-01-lga3.fbcdn.net (2a03:2880:f212:e5:face:b00c:0:4420)  502.406 ms  502.366 ms  266.467 ms
+traceroute to 2a03:2880:f212:e5:face:b00c:0:4420 (2a03:2880:f212:e5:face:b00c:0:4420), 30 hops max, 80 byte packets
+ 1  2401:4900:3a79:a889::d (2401:4900:3a79:a889::d)  2.992 ms  2.979 ms  2.974 ms
+ 2  * * *
+ 3  2401:4900:50:8::1:56d (2401:4900:50:8::1:56d)  499.927 ms  499.923 ms  499.919 ms
+ 4  2404:a800:4a00:800::5 (2404:a800:4a00:800::5)  607.504 ms  607.541 ms  607.540 ms
+ 5  2404:a800::158 (2404:a800::158)  607.543 ms  607.533 ms  607.536 ms
+ 6  as6939.paixny.he.net (2001:504:f::39)  506.681 ms  328.035 ms  327.412 ms
+ 7  eqix-ny9.facebook.com (2001:504:f::3:2934:2)  326.586 ms  326.482 ms  326.453 ms
+ 8  po104.psw01.lga3.tfbnw.net (2620:0:1cff:dead:bef0::233)  325.798 ms po104.psw03.lga3.tfbnw.net (2620:0:1cff:dead:bef0::24f)  320.292 ms po104.psw01.lga3.tfbnw.net (2620:0:1cff:dead:bef0::233)  301.702 ms
+ 9  po8.msw1ae.01.lga3.tfbnw.net (2a03:2880:f012:ffff::375)  305.035 ms po7.msw1ab.01.lga3.tfbnw.net (2a03:2880:f012:ffff::33b)  301.610 ms po3.msw1aa.01.lga3.tfbnw.net (2a03:2880:f012:ffff::269)  306.474 ms
+10  * * *
+11  instagram-p426-shv-01-lga3.fbcdn.net (2a03:2880:f212:e5:face:b00c:0:4420)  490.739 ms  490.194 ms  490.141 ms

@@ -1,0 +1,5 @@
+PING 213.248.110.126 (213.248.110.126) 56(84) bytes of data.
+
+--- 213.248.110.126 ping statistics ---
+1 packets transmitted, 0 received, 100% packet loss, time 0ms
+

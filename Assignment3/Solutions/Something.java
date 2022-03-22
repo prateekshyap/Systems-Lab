@@ -15,7 +15,7 @@ class Something
 	{
 		String[] dirs = {"DigitalOcean","Amazon","Flipkart","Cricbuzz","Codeforces","Instagram","Spotify","Youtube","Twitter"};
 		String[] dates = {"Mar19","Mar20","Mar21","Mar22","Mar23","Mar24"};
-		String[] times = {"00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23"};
+		String[] times = {" 0"," 1"," 2"," 3"," 4"," 5"," 6"," 7"," 8"," 9","10","11","12","13","14","15","16","17","18","19","20","21","22","23"};
 		String[] packets = {"56","64","128","256","512","1024","2048"};
 		String line = "", prevLine = "";
 		String fileName = "";
@@ -24,7 +24,6 @@ class Something
 		BufferedWriter fileWriter = new BufferedWriter(new FileWriter(new File("data.csv")));
 		StringBuffer fileString = new StringBuffer("");
 		ArrayList<ArrayList<Double>> rtts = new ArrayList<ArrayList<Double>>();
-		//fileWriter.write("Time,Packet Size,");
 		for (int dir = 0; dir < 9; ++dir)
 		{
 			fileWriter = new BufferedWriter(new FileWriter(new File(dirs[dir]+".csv")));
@@ -60,22 +59,18 @@ class Something
 						System.out.println(dirs[dir]+" "+dates[dt]+" "+times[t]+" "+packets[s]+" = "+prevLine.length());
 						if (start == -1 && end == -1) newRow.add(Double.MAX_VALUE);
 						else newRow.add(Double.parseDouble(prevLine.substring(start,end)));
-							/*if (hostString.length() != 0) hostString.append(",");
-							hostString.append(dirs[dir]);*/
 						}catch(FileNotFoundException fe)
 						{
-							/*System.out.println(fileName+" not found!");*/
+							System.out.println(fileName+" not found!");
 						}
 						if (fileReader != null) fileReader.close();
 					}
 					if (newRow.size() != 0)
 					{
-						existingTimes.add(Integer.parseInt(times[t]));
+						existingTimes.add(Integer.parseInt(times[t].trim()));
 						rtts.add(newRow);
 					}
 				}
-				//System.out.println(rtts);
-				//System.out.println(existingTimes);
 				fileString = new StringBuffer("");
 				for (int s = 0; s < packets.length; ++s)
 				{
@@ -98,7 +93,6 @@ class Something
 					}
 					fileWriter.write(fileString.toString()); fileWriter.newLine();
 				}
-				//fileWriter.close();
 			}
 			fileWriter.close();
 		}

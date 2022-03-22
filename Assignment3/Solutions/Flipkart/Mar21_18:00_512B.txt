@@ -1,0 +1,5 @@
+PING 163.53.78.110 (163.53.78.110) 512(540) bytes of data.
+
+--- 163.53.78.110 ping statistics ---
+1 packets transmitted, 0 received, 100% packet loss, time 0ms
+

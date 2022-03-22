@@ -1,0 +1,5 @@
+PING 46.101.167.146 (46.101.167.146) 2048(2076) bytes of data.
+
+--- 46.101.167.146 ping statistics ---
+1 packets transmitted, 0 received, 100% packet loss, time 0ms
+
