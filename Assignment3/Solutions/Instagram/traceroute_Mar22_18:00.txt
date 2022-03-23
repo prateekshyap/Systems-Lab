@@ -1,0 +1,25 @@
+traceroute to 2a03:2880:f212:e5:face:b00c:0:4420 (2a03:2880:f212:e5:face:b00c:0:4420), 30 hops max, 80 byte packets
+ 1  2401:4900:3d39:d335::53 (2401:4900:3d39:d335::53)  18.371 ms  18.289 ms  18.226 ms
+ 2  * * *
+ 3  * * *
+ 4  * * *
+ 5  * * 2404:a800::158 (2404:a800::158)  1005.907 ms
+ 6  as6939.paixny.he.net (2001:504:f::39)  985.609 ms  851.160 ms  1466.705 ms
+ 7  eqix-ny9.facebook.com (2001:504:f::3:2934:2)  1466.190 ms  1466.082 ms  1445.859 ms
+ 8  * * *
+ 9  * * po7.msw1al.01.lga3.tfbnw.net (2a03:2880:f012:ffff::34f)  1534.198 ms
+10  instagram-p426-shv-01-lga3.fbcdn.net (2a03:2880:f212:e5:face:b00c:0:4420)  1534.129 ms  1873.223 ms  1534.048 ms
+traceroute to 2a03:2880:f212:e5:face:b00c:0:4420 (2a03:2880:f212:e5:face:b00c:0:4420), 30 hops max, 80 byte packets
+ 1  2401:4900:3d39:d335::53 (2401:4900:3d39:d335::53)  566.885 ms  566.832 ms  566.809 ms
+ 2  * * *
+ 3  * * *
+ 4  * * *
+ 5  * * *
+ 6  * as6939.paixny.he.net (2001:504:f::39)  1843.758 ms  1843.700 ms
+ 7  eqix-ny9.facebook.com (2001:504:f::3:2934:2)  1843.281 ms  441.129 ms  438.921 ms
+ 8  po104.psw03.lga3.tfbnw.net (2620:0:1cff:dead:bef0::24f)  439.915 ms po104.psw04.lga3.tfbnw.net (2620:0:1cff:dead:bef0::251)  995.224 ms po104.psw01.lga3.tfbnw.net (2620:0:1cff:dead:bef0::233)  994.320 ms
+ 9  po5.msw1aa.01.lga3.tfbnw.net (2a03:2880:f012:ffff::2d1)  993.559 ms * *
+10  * * *
+11  * * *
+12  * * *
+13  * * instagram-p426-shv-01-lga3.fbcdn.net (2a03:2880:f212:e5:face:b00c:0:4420)  821.826 ms
