@@ -1,5 +1,0 @@
-PING 35.186.224.25 (35.186.224.25) 64(92) bytes of data.
-
---- 35.186.224.25 ping statistics ---
-25 packets transmitted, 23 received, 8% packet loss, time 24134ms
-rtt min/avg/max/mdev = 111.619/746.525/2768.349/803.992 ms, pipe 3
