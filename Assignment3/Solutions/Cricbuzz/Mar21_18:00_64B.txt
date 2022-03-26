@@ -1,5 +1,0 @@
-PING 23.33.238.186 (23.33.238.186) 64(92) bytes of data.
-
---- 23.33.238.186 ping statistics ---
-1 packets transmitted, 0 received, 100% packet loss, time 0ms
-
