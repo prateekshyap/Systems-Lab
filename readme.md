@@ -17,11 +17,12 @@ Email us in case any doubts.
    * Q3: File System
 3. ___Assignment 03 (Network Diagnostic Commands)___ [Question PDF](/Assignment3/Questions/CS558_Assignment%201%20-%20Basic%20Unix%20Command.pdf)
    * Q1: ````ping```` command
-   * Q2: ````ping```` with multiple hosts
+   * Q2: ````ping```` with multiple hosts (hosts vs time) (time vs packet size)
    * Q3: ````ifconfig```` and ````route```` commands
    * Q4: ````netstat```` command
    * Q5: ````traceroute```` command
-   * Q6: Network Address
-   * Q7: LAN Analysis
+   * Q6: Network Address (arp)
+   * Q7: LAN Analysis (nmap: time vs num of online hosts)
+Solutions: [Prateekshya](/Assignment3/Solutions/214101037.pdf), [Vijay - Short](/Assignment3/Solutions/214101058.pdf), [Vijay - Detailed](/Assignment3/Solutions/IITG_SYSLAB_CS558_A3_NetDiGCommand_VijayP_detailed.pdf) 
 -----------------
 THE END
