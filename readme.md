@@ -23,6 +23,9 @@ Email us in case any doubts.
    * Q5: ````traceroute```` command
    * Q6: Network Address (arp)
    * Q7: LAN Analysis (nmap: time vs num of online hosts)
-Solutions: [Prateekshya](/Assignment3/Solutions/214101037.pdf), [Vijay - Short](/Assignment3/Solutions/214101058.pdf), [Vijay - Detailed](/Assignment3/Solutions/IITG_SYSLAB_CS558_A3_NetDiGCommand_VijayP_detailed.pdf) 
+   
+   Solutions: [Prateekshya](/Assignment3/Solutions/214101037.pdf), [Vijay - Short](/Assignment3/Solutions/214101058.pdf), [Vijay - Detailed](/Assignment3/Solutions/IITG_SYSLAB_CS558_A3_NetDiGCommand_VijayP_detailed.pdf) 
+
+4. ___Assignment 04 ___ (coming....)
 -----------------
 THE END
