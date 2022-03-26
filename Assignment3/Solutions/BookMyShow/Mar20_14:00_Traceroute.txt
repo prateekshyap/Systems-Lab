@@ -1,2 +1,0 @@
-traceroute to 104.16.123.37 (104.16.123.37), 30 hops max, 60 byte packets
- 1  pp (192.168.160.160)  3064.301 ms !H  3064.265 ms !H  3064.240 ms !H

@@ -1,5 +1,0 @@
-PING 104.16.123.37 (104.16.123.37) 64(92) bytes of data.
-
---- 104.16.123.37 ping statistics ---
-1 packets transmitted, 0 received, 100% packet loss, time 0ms
-
