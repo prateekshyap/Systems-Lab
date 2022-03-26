@@ -1,5 +1,0 @@
-PING 213.248.110.126 (213.248.110.126) 56(84) bytes of data.
-
---- 213.248.110.126 ping statistics ---
-25 packets transmitted, 20 received, 20% packet loss, time 24194ms
-rtt min/avg/max/mdev = 433.146/1080.885/1780.347/410.945 ms, pipe 2
