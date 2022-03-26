@@ -1,5 +1,0 @@
-PING 176.32.103.205 (176.32.103.205) 1024(1052) bytes of data.
-
---- 176.32.103.205 ping statistics ---
-1 packets transmitted, 0 received, 100% packet loss, time 0ms
-

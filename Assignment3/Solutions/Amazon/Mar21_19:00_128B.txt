@@ -1,5 +1,0 @@
-PING 176.32.103.205 (176.32.103.205) 128(156) bytes of data.
-
---- 176.32.103.205 ping statistics ---
-25 packets transmitted, 5 received, 80% packet loss, time 24425ms
-rtt min/avg/max/mdev = 706.648/1489.405/2935.349/772.933 ms, pipe 3
