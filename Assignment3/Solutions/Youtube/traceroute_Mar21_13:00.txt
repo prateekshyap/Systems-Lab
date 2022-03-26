@@ -1,1 +1,0 @@
-traceroute to 142.250.64.110 (142.250.64.110), 30 hops max, 60 byte packets
