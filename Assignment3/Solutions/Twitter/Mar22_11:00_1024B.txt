@@ -1,5 +1,0 @@
-PING 104.244.42.1 (104.244.42.1) 1024(1052) bytes of data.
-
---- 104.244.42.1 ping statistics ---
-25 packets transmitted, 18 received, 28% packet loss, time 24108ms
-rtt min/avg/max/mdev = 274.035/730.795/2062.284/424.348 ms, pipe 3
