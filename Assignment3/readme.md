@@ -5,4 +5,4 @@
    * __pingTest.sh__ It is script file which will ping hosts present in that file and generate the respective text file.
    * __tracerouteTest.sh__ It is script file (with default and TCP option) which will find route to the hosts and generate the respective text file.
    * __Something.java__ It will take all pings file generated and make a respective csv file of the each hosts with compiled data.
-3. [EXCEL FILE Consolidated](/Solutions/SYSLAB_A03.xlsx)
+3. [EXCEL FILE Consolidated](/Assignment3/Solutions/SYSLAB_A03.xlsx)
